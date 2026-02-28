@@ -1,0 +1,13 @@
+node_modules
+dist
+.git
+.github
+.vscode
+docs
+research
+.claude
+*.md
+!README.md
+.DS_Store
+.env
+.env.*

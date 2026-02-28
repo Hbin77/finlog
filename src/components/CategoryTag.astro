@@ -1,0 +1,29 @@
+---
+interface Props {
+  category: 'saving' | 'investing' | 'tax' | 'tools' | 'tips';
+  size?: 'sm' | 'md';
+}
+
+const { category, size = 'sm' } = Astro.props;
+
+const categoryConfig: Record<string, { label: string; bg: string; text: string }> = {
+  saving: { label: '저축/예금', bg: 'var(--color-primary-100)', text: 'var(--color-primary-700)' },
+  investing: { label: '투자 입문', bg: 'var(--color-secondary-100)', text: 'var(--color-secondary-700)' },
+  tax: { label: '세금/연말정산', bg: 'var(--color-subtle-100)', text: 'var(--color-subtle-700)' },
+  tools: { label: '재테크 도구', bg: 'var(--color-accent-100)', text: 'var(--color-accent-700)' },
+  tips: { label: '절약 팁', bg: 'var(--color-highlight-100)', text: 'var(--color-highlight-700)' },
+};
+
+const config = categoryConfig[category] || categoryConfig.saving;
+const sizeClasses = size === 'md' ? 'px-3.5 py-1.5 text-sm' : 'px-3 py-1 text-xs';
+---
+
+<span
+  class:list={[
+    'inline-block rounded-full font-medium whitespace-nowrap',
+    sizeClasses,
+  ]}
+  style={`background-color: ${config.bg}; color: ${config.text};`}
+>
+  {config.label}
+</span>

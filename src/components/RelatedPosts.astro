@@ -1,0 +1,21 @@
+---
+import BlogCard from './BlogCard.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+}
+
+const { posts } = Astro.props;
+---
+
+{posts.length > 0 && (
+  <section class="mt-12 pt-10 border-t border-[var(--color-border)]">
+    <h2 class="text-xl font-bold text-[var(--color-text)] mb-6">관련 글</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {posts.slice(0, 3).map((post) => (
+        <BlogCard post={post} />
+      ))}
+    </div>
+  </section>
+)}

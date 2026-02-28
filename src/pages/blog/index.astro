@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import Pagination from '../../components/Pagination.astro';
+import CategoryTag from '../../components/CategoryTag.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const sortedPosts = allPosts.sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+// Pagination
+const postsPerPage = 9;
+const currentPage = 1;
+const totalPages = Math.ceil(sortedPosts.length / postsPerPage);
+const paginatedPosts = sortedPosts.slice(0, postsPerPage);
+
+const categories = [
+  { id: 'saving' as const, label: '저축/예금', href: '/category/saving/' },
+  { id: 'investing' as const, label: '투자 입문', href: '/category/investing/' },
+  { id: 'tax' as const, label: '세금/연말정산', href: '/category/tax/' },
+  { id: 'tools' as const, label: '재테크 도구', href: '/category/tools/' },
+  { id: 'tips' as const, label: '절약 팁', href: '/category/tips/' },
+];
+---
+
+<BaseLayout title="블로그 | 핀로그" description="재테크, 투자, 세금, 절약 등 실용적인 금융 정보를 모아보세요.">
+  <div class="mx-auto max-w-[var(--container-max-width)] px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+    <!-- Page header -->
+    <div class="mb-8">
+      <h1 class="text-2xl md:text-[var(--font-size-h1)] font-bold text-[var(--color-text)] mb-2">블로그</h1>
+      <p class="text-[var(--color-text-sub)]">재테크, 투자, 세금, 절약 등 실용적인 금융 정보를 모아보세요.</p>
+    </div>
+
+    <!-- Category filter tabs -->
+    <div class="flex flex-wrap gap-2 mb-8">
+      <a
+        href="/blog/"
+        class="px-4 py-2 text-sm font-medium rounded-full bg-[var(--color-primary-500)] text-white"
+      >
+        전체
+      </a>
+      {categories.map((cat) => (
+        <a
+          href={cat.href}
+          class="px-4 py-2 text-sm font-medium rounded-full bg-[var(--color-neutral-100)] text-[var(--color-neutral-600)] hover:bg-[var(--color-neutral-200)] transition-colors duration-[var(--transition-fast)]"
+        >
+          {cat.label}
+        </a>
+      ))}
+    </div>
+
+    <!-- Posts grid -->
+    {paginatedPosts.length > 0 ? (
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {paginatedPosts.map((post) => (
+          <BlogCard post={post} />
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-16">
+        <p class="text-[var(--color-neutral-500)]">아직 작성된 글이 없습니다.</p>
+      </div>
+    )}
+
+    <!-- Pagination -->
+    <Pagination currentPage={currentPage} totalPages={totalPages} baseUrl="/blog/" />
+  </div>
+</BaseLayout>

@@ -1,0 +1,63 @@
+---
+import CategoryTag from './CategoryTag.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { title, description, pubDate, category, image, imageAlt } = post.data;
+
+const formattedDate = pubDate.toLocaleDateString('ko-KR', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+// Estimate reading time (~500 chars per minute for Korean)
+const readingTime = Math.max(1, Math.ceil(post.body!.length / 500));
+---
+
+<article class="group bg-white rounded-[var(--radius-lg)] shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-md)] hover:-translate-y-0.5 transition-all duration-[var(--transition-base)] overflow-hidden">
+  <a href={`/blog/${post.slug}/`} class="block">
+    <!-- Image -->
+    {image ? (
+      <div class="aspect-video overflow-hidden">
+        <img
+          src={image}
+          alt={imageAlt || title}
+          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          loading="lazy"
+        />
+      </div>
+    ) : (
+      <div class="aspect-video bg-gradient-to-br from-[var(--color-primary-100)] to-[var(--color-secondary-100)] flex items-center justify-center">
+        <svg class="w-12 h-12 text-[var(--color-primary-300)] opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+        </svg>
+      </div>
+    )}
+
+    <!-- Content -->
+    <div class="p-5">
+      <div class="mb-2.5">
+        <CategoryTag category={category} />
+      </div>
+
+      <h3 class="text-[var(--font-size-h4)] font-semibold text-[var(--color-text)] leading-snug mb-2 line-clamp-2 group-hover:text-[var(--color-secondary-500)] transition-colors">
+        {title}
+      </h3>
+
+      <p class="text-sm text-[var(--color-text-sub)] leading-relaxed line-clamp-3 mb-3">
+        {description}
+      </p>
+
+      <div class="flex items-center gap-2 text-xs text-[var(--color-neutral-400)]">
+        <time datetime={pubDate.toISOString()}>{formattedDate}</time>
+        <span aria-hidden="true">&middot;</span>
+        <span>{readingTime}분 읽기</span>
+      </div>
+    </div>
+  </a>
+</article>

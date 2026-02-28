@@ -1,0 +1,101 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BlogCard from '../components/BlogCard.astro';
+import CategoryTag from '../components/CategoryTag.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const latestPosts = allPosts
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 6);
+
+const categories = [
+  { id: 'saving' as const, label: '저축/예금 전략', desc: '월급 관리, 적금, 비상금 등 안정적인 자산 형성 전략', href: '/category/saving/' },
+  { id: 'investing' as const, label: '투자 입문', desc: 'ETF, 주식, 펀드 등 초보자를 위한 투자 가이드', href: '/category/investing/' },
+  { id: 'tax' as const, label: '세금/연말정산', desc: '절세 전략, 소득공제, 세액공제 완벽 정리', href: '/category/tax/' },
+  { id: 'tools' as const, label: '재테크 도구 리뷰', desc: '가계부 앱, 은행 앱, 자산관리 서비스 비교', href: '/category/tools/' },
+  { id: 'tips' as const, label: '생활비 절약 팁', desc: '식비, 통신비, 보험료 등 실생활 절약법', href: '/category/tips/' },
+];
+---
+
+<BaseLayout title="핀로그 | 2030 직장인을 위한 실용 재테크 가이드">
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-[var(--color-primary-500)] to-[var(--color-primary-900)] text-white py-16 md:py-24">
+    <div class="mx-auto max-w-[var(--container-max-width)] px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="text-3xl md:text-[var(--font-size-display)] font-extrabold leading-tight mb-4">
+        2030 직장인을 위한<br />실용 재테크 가이드
+      </h1>
+      <p class="text-lg md:text-xl text-[var(--color-primary-200)] max-w-2xl mx-auto mb-8">
+        저축부터 투자, 세금, 앱 리뷰까지. 복잡한 금융 정보를 쉽고 실용적으로 정리합니다.
+      </p>
+      <a
+        href="/blog/"
+        class="inline-flex items-center gap-2 px-6 py-3 bg-[var(--color-secondary-500)] text-white font-semibold rounded-[var(--radius-md)] hover:bg-[var(--color-secondary-600)] transition-colors duration-[var(--transition-fast)]"
+      >
+        글 모아보기
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- Latest Posts -->
+  {latestPosts.length > 0 && (
+    <section class="py-12 md:py-16">
+      <div class="mx-auto max-w-[var(--container-max-width)] px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between mb-8">
+          <h2 class="text-xl md:text-2xl font-bold text-[var(--color-text)]">최신 글</h2>
+          <a href="/blog/" class="text-sm font-medium text-[var(--color-secondary-500)] hover:text-[var(--color-secondary-600)] transition-colors">
+            전체 보기 &rarr;
+          </a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {latestPosts.map((post) => (
+            <BlogCard post={post} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Category Highlights -->
+  <section class="py-12 md:py-16 bg-[var(--color-subtle-50)]">
+    <div class="mx-auto max-w-[var(--container-max-width)] px-4 sm:px-6 lg:px-8">
+      <h2 class="text-xl md:text-2xl font-bold text-[var(--color-text)] text-center mb-10">카테고리</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {categories.map((cat) => (
+          <a
+            href={cat.href}
+            class="block bg-white rounded-[var(--radius-lg)] p-6 shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-md)] hover:-translate-y-0.5 transition-all duration-[var(--transition-base)]"
+          >
+            <div class="mb-3">
+              <CategoryTag category={cat.id} size="md" />
+            </div>
+            <p class="text-sm text-[var(--color-text-sub)] leading-relaxed">{cat.desc}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-12 md:py-16">
+    <div class="mx-auto max-w-[var(--container-max-width)] px-4 sm:px-6 lg:px-8">
+      <div class="bg-gradient-to-r from-[var(--color-primary-50)] to-[var(--color-accent-50)] rounded-[var(--radius-xl)] p-8 md:p-12 text-center">
+        <h2 class="text-xl md:text-2xl font-bold text-[var(--color-text)] mb-3">
+          재테크, 어디서부터 시작해야 할지 모르겠다면?
+        </h2>
+        <p class="text-[var(--color-text-sub)] mb-6 max-w-xl mx-auto">
+          핀로그에서 단계별 가이드를 확인하세요. 사회초년생부터 경력직까지, 누구나 따라할 수 있는 실용적인 재테크 정보를 제공합니다.
+        </p>
+        <a
+          href="/blog/"
+          class="inline-flex items-center gap-2 px-6 py-3 bg-[var(--color-secondary-500)] text-white font-semibold rounded-[var(--radius-md)] hover:bg-[var(--color-secondary-600)] transition-colors duration-[var(--transition-fast)]"
+        >
+          시작하기
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

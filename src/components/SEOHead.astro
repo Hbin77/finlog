@@ -1,0 +1,77 @@
+---
+/**
+ * SEO 메타 태그 컴포넌트
+ * - title, description, canonical URL
+ * - Open Graph (og) 태그
+ * - Twitter Card 태그
+ */
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  image?: string;
+  imageAlt?: string;
+  type?: 'website' | 'article';
+  publishedDate?: Date;
+  modifiedDate?: Date;
+  author?: string;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  image = '/og-default.png',
+  imageAlt = '핀로그',
+  type = 'website',
+  publishedDate,
+  modifiedDate,
+  author = '핀로그',
+  noindex = false,
+} = Astro.props;
+
+const canonicalURL = canonical
+  ? new URL(canonical, Astro.site)
+  : new URL(Astro.url.pathname, Astro.site);
+
+const imageURL = new URL(image, Astro.site);
+const siteName = '핀로그';
+---
+
+<!-- 기본 메타 태그 -->
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalURL} />
+<link rel="alternate" hreflang="ko" href={canonicalURL} />
+<link rel="alternate" hreflang="x-default" href={canonicalURL} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<!-- Open Graph -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={imageURL} />
+<meta property="og:image:alt" content={imageAlt} />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:locale" content="ko_KR" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageURL} />
+<meta name="twitter:image:alt" content={imageAlt} />
+
+<!-- 글(article) 전용 메타 태그 -->
+{type === 'article' && publishedDate && (
+  <meta property="article:published_time" content={publishedDate.toISOString()} />
+)}
+{type === 'article' && modifiedDate && (
+  <meta property="article:modified_time" content={modifiedDate.toISOString()} />
+)}
+{type === 'article' && author && (
+  <meta property="article:author" content={author} />
+)}

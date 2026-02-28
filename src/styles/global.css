@@ -1,0 +1,463 @@
+/* =========================================
+   핀로그 (FinLog)
+   Global Styles + Tailwind CSS v4 Theme
+   팔레트: Coolors 확정 (2026-03)
+   원칙: 미니멀, 여백 활용, 시각적 계층 구조
+   ========================================= */
+
+@import "tailwindcss";
+@import "./design-tokens.css";
+
+/* Pretendard font is loaded via <link> in BaseLayout.astro (dynamic subset for performance) */
+
+/* =========================================
+   Tailwind v4 Theme Extension
+   ========================================= */
+
+@theme {
+  /* ---- Font Family ---- */
+  --font-sans: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, Roboto, 'Helvetica Neue', sans-serif;
+
+  /* ---- Primary: Blue Slate (#476A6F) ---- */
+  --color-primary-50: #f0f4f4;
+  --color-primary-100: #dce4e5;
+  --color-primary-200: #b8c9cb;
+  --color-primary-300: #8da5a8;
+  --color-primary-400: #5f8185;
+  --color-primary-500: #476a6f;
+  --color-primary-600: #3d5b5f;
+  --color-primary-700: #324b4e;
+  --color-primary-800: #2d3a3a;
+  --color-primary-900: #1e2a2b;
+
+  /* ---- Secondary: Seagrass (#519E8A) ---- */
+  --color-secondary-50: #eef7f4;
+  --color-secondary-100: #d4ebe4;
+  --color-secondary-200: #a8d7c8;
+  --color-secondary-300: #7bc3ac;
+  --color-secondary-400: #5fb296;
+  --color-secondary-500: #519e8a;
+  --color-secondary-600: #468777;
+  --color-secondary-700: #3a7063;
+  --color-secondary-800: #2e594f;
+  --color-secondary-900: #22433b;
+
+  /* ---- Accent: Muted Teal (#7EB09B) ---- */
+  --color-accent-50: #f2f7f5;
+  --color-accent-100: #dfeee8;
+  --color-accent-200: #c0ddd2;
+  --color-accent-300: #9ecbb9;
+  --color-accent-400: #7eb09b;
+  --color-accent-500: #6a9d89;
+  --color-accent-600: #588474;
+  --color-accent-700: #496c5f;
+  --color-accent-800: #3a554c;
+  --color-accent-900: #2c3f38;
+
+  /* ---- Subtle: Dry Sage (#C5C9A4) ---- */
+  --color-subtle-50: #f8f9f5;
+  --color-subtle-100: #f0f1ea;
+  --color-subtle-200: #e2e4d8;
+  --color-subtle-300: #d3d6c1;
+  --color-subtle-400: #c5c9a4;
+  --color-subtle-500: #b0b48e;
+  --color-subtle-600: #959975;
+  --color-subtle-700: #7a7d5f;
+  --color-subtle-800: #5f614b;
+  --color-subtle-900: #444636;
+
+  /* ---- Highlight: Cotton Rose (#ECBEB4) ---- */
+  --color-highlight-50: #fdf5f3;
+  --color-highlight-100: #fae9e5;
+  --color-highlight-200: #f5d4cc;
+  --color-highlight-300: #ecbeb4;
+  --color-highlight-400: #e0a498;
+  --color-highlight-500: #d48b7e;
+  --color-highlight-600: #c07060;
+  --color-highlight-700: #a15a4c;
+  --color-highlight-800: #82483d;
+  --color-highlight-900: #633730;
+
+  /* ---- Neutral (warm-toned) ---- */
+  --color-neutral-50: #fafaf8;
+  --color-neutral-100: #f3f4f1;
+  --color-neutral-200: #e2e5dc;
+  --color-neutral-300: #d1d5cc;
+  --color-neutral-400: #a3aca3;
+  --color-neutral-500: #6b7b7b;
+  --color-neutral-600: #556363;
+  --color-neutral-700: #3f4c4c;
+  --color-neutral-800: #2d3a3a;
+  --color-neutral-900: #1e2a2b;
+
+  /* ---- Semantic ---- */
+  --color-success-50: #f0fdf4;
+  --color-success-500: #22c55e;
+  --color-success-700: #15803d;
+  --color-warning-50: #fffbeb;
+  --color-warning-500: #f59e0b;
+  --color-warning-700: #b45309;
+  --color-error-50: #fef2f2;
+  --color-error-500: #ef4444;
+  --color-error-700: #b91c1c;
+  --color-info-50: #eef7f4;
+  --color-info-500: #519e8a;
+  --color-info-700: #3a7063;
+
+  /* ---- Typography Scale ---- */
+  --font-size-caption: 0.75rem;
+  --font-size-small: 0.875rem;
+  --font-size-body: 1rem;
+  --font-size-h4: 1.25rem;
+  --font-size-h3: 1.5rem;
+  --font-size-h2: 1.875rem;
+  --font-size-h1: 2.25rem;
+  --font-size-display: 3rem;
+
+  /* ---- Shadows ---- */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+
+  /* ---- Border Radius ---- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+}
+
+/* =========================================
+   Base / Reset Styles
+   ========================================= */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.75;
+    color: #2d3a3a;
+    background-color: #fafaf8;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+
+  ::selection {
+    background-color: var(--color-accent-200);
+    color: var(--color-primary-900);
+  }
+
+  a {
+    color: var(--color-secondary-500);
+    text-decoration: none;
+    transition: color 150ms ease;
+  }
+
+  a:hover {
+    color: var(--color-secondary-600);
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-secondary-500);
+    outline-offset: 2px;
+  }
+}
+
+/* =========================================
+   Prose / Article Styles (블로그 본문)
+   ========================================= */
+
+@layer components {
+  .prose {
+    max-width: 72ch;
+    color: #2d3a3a;
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+
+  /* Headings */
+  .prose h1 {
+    font-size: var(--font-size-h1);
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.025em;
+    color: var(--color-primary-500);
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .prose h2 {
+    font-size: var(--font-size-h2);
+    font-weight: 700;
+    line-height: 1.375;
+    color: var(--color-primary-500);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--color-subtle-200);
+  }
+
+  .prose h3 {
+    font-size: var(--font-size-h3);
+    font-weight: 600;
+    line-height: 1.375;
+    color: var(--color-primary-600);
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .prose h4 {
+    font-size: var(--font-size-h4);
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--color-primary-700);
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Paragraphs */
+  .prose p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+
+  .prose p + p {
+    margin-top: 1rem;
+  }
+
+  /* Lists */
+  .prose ul,
+  .prose ol {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+  }
+
+  .prose li {
+    margin-bottom: 0.5rem;
+  }
+
+  .prose li::marker {
+    color: var(--color-secondary-500);
+  }
+
+  .prose ul ul,
+  .prose ol ol,
+  .prose ul ol,
+  .prose ol ul {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Blockquotes */
+  .prose blockquote {
+    margin: 1.5rem 0;
+    padding: 1rem 1.5rem;
+    border-left: 4px solid var(--color-secondary-500);
+    background-color: var(--color-secondary-50);
+    border-radius: 0 8px 8px 0;
+    color: var(--color-neutral-700);
+    font-style: normal;
+  }
+
+  .prose blockquote p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Inline Code */
+  .prose code {
+    font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+    font-size: 0.875em;
+    background-color: var(--color-neutral-100);
+    color: var(--color-primary-600);
+    padding: 0.125em 0.375em;
+    border-radius: 4px;
+  }
+
+  /* Code Blocks */
+  .prose pre {
+    margin: 1.5rem 0;
+    padding: 1rem 1.25rem;
+    background-color: var(--color-neutral-900);
+    color: var(--color-neutral-100);
+    border-radius: 12px;
+    overflow-x: auto;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .prose pre code {
+    background-color: transparent;
+    color: inherit;
+    padding: 0;
+    border-radius: 0;
+    font-size: inherit;
+  }
+
+  /* Tables */
+  .prose table {
+    width: 100%;
+    margin: 1.5rem 0;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+
+  .prose thead {
+    background-color: var(--color-primary-50);
+  }
+
+  .prose th {
+    font-weight: 600;
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-bottom: 2px solid var(--color-primary-200);
+    color: var(--color-primary-500);
+  }
+
+  .prose td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #e2e5dc;
+  }
+
+  .prose tbody tr:hover {
+    background-color: var(--color-neutral-50);
+  }
+
+  /* Horizontal Rule */
+  .prose hr {
+    margin: 2.5rem 0;
+    border: none;
+    border-top: 1px solid #e2e5dc;
+  }
+
+  /* Strong */
+  .prose strong {
+    font-weight: 600;
+    color: var(--color-neutral-900);
+  }
+
+  /* Links in prose */
+  .prose a {
+    color: var(--color-secondary-500);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-color: var(--color-secondary-200);
+    transition: color 150ms ease, text-decoration-color 150ms ease;
+  }
+
+  .prose a:hover {
+    color: var(--color-secondary-600);
+    text-decoration-color: var(--color-secondary-500);
+  }
+
+  /* Images in prose */
+  .prose img {
+    margin: 1.5rem auto;
+    border-radius: 12px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  .prose figure {
+    margin: 2rem 0;
+  }
+
+  .prose figcaption {
+    margin-top: 0.5rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: #6b7b7b;
+  }
+}
+
+/* =========================================
+   Utility Classes
+   ========================================= */
+
+@layer utilities {
+  /* Screen reader only */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  /* Text clamp */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Category badge colors */
+  .badge-saving {
+    background-color: var(--color-primary-100);
+    color: var(--color-primary-700);
+  }
+
+  .badge-investing {
+    background-color: var(--color-secondary-100);
+    color: var(--color-secondary-700);
+  }
+
+  .badge-tax {
+    background-color: var(--color-subtle-100);
+    color: var(--color-subtle-700);
+  }
+
+  .badge-tools {
+    background-color: var(--color-accent-100);
+    color: var(--color-accent-700);
+  }
+
+  .badge-tips {
+    background-color: var(--color-highlight-100);
+    color: var(--color-highlight-700);
+  }
+
+  /* Skip to content (accessibility) */
+  .skip-to-content {
+    position: absolute;
+    top: -100%;
+    left: 1rem;
+    z-index: 100;
+    padding: 0.5rem 1rem;
+    background-color: var(--color-primary-500);
+    color: white;
+    border-radius: 0 0 8px 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: top 150ms ease;
+  }
+
+  .skip-to-content:focus {
+    top: 0;
+  }
+}

@@ -1,0 +1,77 @@
+---
+const currentYear = new Date().getFullYear();
+
+const categories = [
+  { href: '/category/saving/', label: '저축/예금 전략' },
+  { href: '/category/investing/', label: '투자 입문' },
+  { href: '/category/tax/', label: '세금/연말정산' },
+  { href: '/category/tools/', label: '재테크 도구 리뷰' },
+  { href: '/category/tips/', label: '생활비 절약 팁' },
+];
+
+const legalPages = [
+  { href: '/about/', label: 'About' },
+  { href: '/privacy-policy/', label: '개인정보처리방침' },
+  { href: '/terms/', label: '이용약관' },
+  { href: '/disclaimer/', label: '면책조항' },
+  { href: '/contact/', label: '문의하기' },
+];
+---
+
+<footer class="bg-[var(--color-footer-bg)] text-[var(--color-footer-text)]">
+  <div class="mx-auto max-w-[var(--container-max-width)] px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+    <!-- 3-column grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
+      <!-- Column 1: Site info -->
+      <div>
+        <a href="/" class="text-white text-xl font-bold tracking-tight">
+          핀로그
+        </a>
+        <p class="mt-3 text-sm leading-relaxed opacity-75">
+          2030 직장인을 위한 실용 재테크 & 생산성 도구 가이드. 저축, 투자, 세금, 앱 리뷰까지 알기 쉽게 정리합니다.
+        </p>
+      </div>
+
+      <!-- Column 2: Categories -->
+      <div>
+        <h3 class="text-white text-sm font-semibold uppercase tracking-wide mb-4">카테고리</h3>
+        <ul class="space-y-2.5">
+          {categories.map((cat) => (
+            <li>
+              <a
+                href={cat.href}
+                class="text-sm opacity-75 hover:opacity-100 hover:text-white transition-all duration-[var(--transition-fast)]"
+              >
+                {cat.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Column 3: Legal pages -->
+      <div>
+        <h3 class="text-white text-sm font-semibold uppercase tracking-wide mb-4">안내</h3>
+        <ul class="space-y-2.5">
+          {legalPages.map((page) => (
+            <li>
+              <a
+                href={page.href}
+                class="text-sm opacity-75 hover:opacity-100 hover:text-white transition-all duration-[var(--transition-fast)]"
+              >
+                {page.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bottom copyright -->
+    <div class="mt-10 pt-8 border-t border-white/10">
+      <p class="text-center text-xs opacity-50">
+        &copy; {currentYear} 핀로그. All rights reserved.
+      </p>
+    </div>
+  </div>
+</footer>

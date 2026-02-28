@@ -1,0 +1,122 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import CategoryTag from '../components/CategoryTag.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+import RelatedPosts from '../components/RelatedPosts.astro';
+import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  headings: { depth: number; slug: string; text: string }[];
+}
+
+const { post, headings } = Astro.props;
+const { title, description, pubDate, updatedDate, category, image, imageAlt } = post.data;
+
+const categoryLabels: Record<string, string> = {
+  saving: '저축/예금',
+  investing: '투자 입문',
+  tax: '세금/연말정산',
+  tools: '재테크 도구',
+  tips: '절약 팁',
+};
+
+const categoryUrls: Record<string, string> = {
+  saving: '/category/saving/',
+  investing: '/category/investing/',
+  tax: '/category/tax/',
+  tools: '/category/tools/',
+  tips: '/category/tips/',
+};
+
+const formattedDate = pubDate.toLocaleDateString('ko-KR', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+const formattedUpdatedDate = updatedDate?.toLocaleDateString('ko-KR', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+// Estimate reading time (~500 chars per minute for Korean)
+const readingTime = Math.max(1, Math.ceil(post.body!.length / 500));
+
+// Get related posts (same category, exclude current post)
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const relatedPosts = allPosts
+  .filter((p) => p.data.category === category && p.slug !== post.slug)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+
+const breadcrumbItems = [
+  { label: '홈', href: '/' },
+  { label: categoryLabels[category], href: categoryUrls[category] },
+  { label: title },
+];
+---
+
+<BaseLayout
+  title={`${title} | 핀로그`}
+  description={description}
+  image={image}
+  imageAlt={imageAlt}
+  type="article"
+  publishedDate={pubDate}
+  modifiedDate={updatedDate}
+>
+  <div class="mx-auto max-w-[var(--container-max-width)] px-4 sm:px-6 lg:px-8 py-6 md:py-10">
+    <Breadcrumb items={breadcrumbItems} />
+
+    <div class="lg:grid lg:grid-cols-[1fr_280px] lg:gap-10">
+      <!-- Main content -->
+      <article>
+        <!-- Article header -->
+        <header class="mb-8">
+          <div class="mb-3">
+            <CategoryTag category={category} size="md" />
+          </div>
+          <h1 class="text-2xl md:text-[var(--font-size-h1)] font-bold text-[var(--color-text)] leading-tight mb-4">
+            {title}
+          </h1>
+          <div class="flex flex-wrap items-center gap-3 text-sm text-[var(--color-neutral-500)]">
+            <time datetime={pubDate.toISOString()}>{formattedDate}</time>
+            {formattedUpdatedDate && (
+              <>
+                <span aria-hidden="true">&middot;</span>
+                <span>수정: {formattedUpdatedDate}</span>
+              </>
+            )}
+            <span aria-hidden="true">&middot;</span>
+            <span>{readingTime}분 읽기</span>
+          </div>
+        </header>
+
+        <!-- Table of Contents (mobile: inside article) -->
+        <div class="lg:hidden">
+          <TableOfContents headings={headings} />
+        </div>
+
+        <!-- Article body (uses .prose styles from global.css) -->
+        <div class="prose max-w-none">
+          <slot />
+        </div>
+
+        <!-- Related posts -->
+        <RelatedPosts posts={relatedPosts} />
+      </article>
+
+      <!-- Sidebar (desktop only) -->
+      <aside class="hidden lg:block">
+        <div class="sticky top-24 space-y-8">
+          <!-- Table of Contents -->
+          <TableOfContents headings={headings} />
+        </div>
+      </aside>
+    </div>
+  </div>
+</BaseLayout>

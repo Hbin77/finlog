@@ -1,0 +1,65 @@
+---
+interface Props {
+  currentPage: number;
+  totalPages: number;
+  baseUrl: string;
+}
+
+const { currentPage, totalPages, baseUrl } = Astro.props;
+
+function getPageUrl(page: number): string {
+  if (page === 1) return baseUrl;
+  return `${baseUrl}${page}/`;
+}
+
+const hasPrev = currentPage > 1;
+const hasNext = currentPage < totalPages;
+---
+
+{totalPages > 1 && (
+  <nav class="flex items-center justify-center gap-2 mt-10" aria-label="페이지 네비게이션">
+    {hasPrev ? (
+      <a
+        href={getPageUrl(currentPage - 1)}
+        class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-[var(--color-secondary-500)] bg-white border border-[var(--color-border)] rounded-[var(--radius-md)] hover:bg-[var(--color-secondary-50)] transition-colors duration-[var(--transition-fast)]"
+        aria-label="이전 페이지"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        이전
+      </a>
+    ) : (
+      <span class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-[var(--color-neutral-300)] bg-white border border-[var(--color-border)] rounded-[var(--radius-md)] cursor-not-allowed">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        이전
+      </span>
+    )}
+
+    <span class="px-3 py-2 text-sm text-[var(--color-neutral-600)]">
+      {currentPage} / {totalPages}
+    </span>
+
+    {hasNext ? (
+      <a
+        href={getPageUrl(currentPage + 1)}
+        class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-[var(--color-secondary-500)] bg-white border border-[var(--color-border)] rounded-[var(--radius-md)] hover:bg-[var(--color-secondary-50)] transition-colors duration-[var(--transition-fast)]"
+        aria-label="다음 페이지"
+      >
+        다음
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+    ) : (
+      <span class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-[var(--color-neutral-300)] bg-white border border-[var(--color-border)] rounded-[var(--radius-md)] cursor-not-allowed">
+        다음
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </span>
+    )}
+  </nav>
+)}

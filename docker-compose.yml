@@ -1,0 +1,9 @@
+services:
+  finlog:
+    build: .
+    container_name: finlog
+    ports:
+      - "8086:8086"
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Seoul

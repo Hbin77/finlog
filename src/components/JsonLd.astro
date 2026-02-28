@@ -1,0 +1,102 @@
+---
+/**
+ * JSON-LD 구조화 데이터 컴포넌트
+ * - BlogPosting: 블로그 글
+ * - WebSite: 사이트 정보
+ * - BreadcrumbList: 탐색 경로
+ */
+
+interface BreadcrumbItem {
+  name: string;
+  url: string;
+}
+
+interface Props {
+  type: 'BlogPosting' | 'WebSite' | 'BreadcrumbList';
+  // BlogPosting 전용
+  title?: string;
+  description?: string;
+  publishedDate?: Date;
+  modifiedDate?: Date;
+  author?: string;
+  image?: string;
+  url?: string;
+  // BreadcrumbList 전용
+  breadcrumbs?: BreadcrumbItem[];
+}
+
+const {
+  type,
+  title,
+  description,
+  publishedDate,
+  modifiedDate,
+  author = '핀로그',
+  image,
+  url,
+  breadcrumbs,
+} = Astro.props;
+
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? '';
+const currentUrl = url ?? new URL(Astro.url.pathname, Astro.site).toString();
+
+function buildSchema() {
+  if (type === 'BlogPosting') {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      headline: title,
+      description: description,
+      image: image ? new URL(image, Astro.site).toString() : undefined,
+      datePublished: publishedDate?.toISOString(),
+      dateModified: (modifiedDate ?? publishedDate)?.toISOString(),
+      author: {
+        '@type': 'Person',
+        name: author,
+      },
+      publisher: {
+        '@type': 'Organization',
+        name: '핀로그',
+        url: siteUrl,
+      },
+      mainEntityOfPage: {
+        '@type': 'WebPage',
+        '@id': currentUrl,
+      },
+    };
+  }
+
+  if (type === 'WebSite') {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: '핀로그',
+      alternateName: 'FinLog',
+      url: siteUrl,
+      description: '2030 직장인을 위한 실용 재테크 & 생산성 도구 가이드',
+      inLanguage: 'ko',
+    };
+  }
+
+  if (type === 'BreadcrumbList' && breadcrumbs) {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: breadcrumbs.map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.name,
+        item: new URL(item.url, Astro.site).toString(),
+      })),
+    };
+  }
+
+  return null;
+}
+
+const schema = buildSchema();
+---
+
+{schema && (
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+)}
