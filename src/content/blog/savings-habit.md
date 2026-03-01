@@ -1,7 +1,7 @@
 ---
 title: "저축 습관 만들기: 돈이 모이는 7가지 자동화 전략"
 description: "의지력에 기대지 않고 자동으로 돈이 모이는 7가지 저축 자동화 전략을 실전 사례와 함께 소개합니다."
-pubDate: 2026-03-01
+pubDate: 2025-06-01
 category: "saving"
 tags: ["저축습관", "자동이체", "통장쪼개기", "선저축후지출", "재테크"]
 image: "/images/saving-8.webp"

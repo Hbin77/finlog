@@ -5,7 +5,7 @@ pubDate: 2026-03-01
 category: "tools"
 tags: ["Notion", "가계부", "템플릿", "지출관리"]
 image: "/images/tools-7.webp"
-imageAlt: "스마트폰 가계부 앱으로 지출을 관리하는 모습"
+imageAlt: "Notion으로 만든 가계부 데이터베이스 화면"
 ---
 
 가계부 앱이 맞지 않는 분이 있습니다. 자동 분류가 오히려 불편하거나, 원하는 항목을 자유롭게 추가하고 싶은 경우입니다. 이런 분에게 Notion 가계부가 좋은 대안이 됩니다.

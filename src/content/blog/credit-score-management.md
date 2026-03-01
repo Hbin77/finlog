@@ -1,7 +1,7 @@
 ---
 title: "신용점수 올리는 실전 방법 7가지"
 description: "신용점수의 구조를 이해하고 실제로 점수를 올릴 수 있는 7가지 실전 방법을 단계별로 정리했습니다."
-pubDate: 2026-03-01
+pubDate: 2025-08-01
 category: "saving"
 tags: ["신용점수", "신용관리", "신용등급", "금융생활", "대출금리"]
 image: "/images/saving-3.webp"
