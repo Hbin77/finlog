@@ -4,7 +4,7 @@ description: "잊고 있던 구독 서비스를 발견하고 정리하는 방법
 pubDate: 2026-03-01
 category: "tips"
 tags: ["구독정리", "구독료절약", "고정비절감", "지출점검"]
-image: "/images/3.webp"
+image: "/images/tips-7.webp"
 imageAlt: "구독 서비스 결제 내역을 점검하는 화면"
 ---
 

@@ -4,7 +4,7 @@ description: "수도세와 가스비를 합쳐 월 2만원 이상 절약할 수 
 pubDate: 2026-03-01
 category: "tips"
 tags: ["수도세절약", "가스비절약", "공과금절약", "생활비절감"]
-image: "/images/3.webp"
+image: "/images/tips-9.webp"
 imageAlt: "수도 계량기와 가스 밸브를 점검하는 모습"
 ---
 

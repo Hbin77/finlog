@@ -4,7 +4,7 @@ description: "2026년 청년전용 버팀목 전세대출과 주요 전세대출
 pubDate: 2026-03-01
 category: "saving"
 tags: ["청년전세대출", "버팀목전세대출", "전세자금대출", "청년금융", "주거"]
-image: "/images/5.webp"
+image: "/images/saving-11.webp"
 imageAlt: "저축과 은행 적금을 상징하는 동전과 저금통"
 ---
 

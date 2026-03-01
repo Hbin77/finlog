@@ -4,7 +4,7 @@ description: "뱅크샐러드, 토스, 카카오페이 등 인기 가계부 앱 
 pubDate: 2026-03-01
 category: "tools"
 tags: ["가계부앱", "뱅크샐러드", "토스", "카카오페이", "자산관리"]
-image: "/images/1.webp"
+image: "/images/tools-3.webp"
 imageAlt: "스마트폰 가계부 앱으로 지출을 관리하는 모습"
 ---
 

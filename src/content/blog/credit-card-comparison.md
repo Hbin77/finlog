@@ -4,7 +4,7 @@ description: "소비 패턴별 최적의 신용카드를 추천합니다. 포인
 pubDate: 2026-03-01
 category: "tools"
 tags: ["신용카드추천", "카드비교", "직장인카드", "카드혜택"]
-image: "/images/1.webp"
+image: "/images/tools-4.webp"
 imageAlt: "신용카드 혜택을 비교하는 직장인"
 ---
 

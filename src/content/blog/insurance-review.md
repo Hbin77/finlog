@@ -4,7 +4,7 @@ description: "자동차보험 비교 사이트를 활용해 보험료를 20% 이
 pubDate: 2026-03-01
 category: "tips"
 tags: ["자동차보험", "보험비교", "보험료절약", "할인특약", "마일리지보험"]
-image: "/images/3.webp"
+image: "/images/tips-4.webp"
 imageAlt: "에너지 절약을 위한 밝은 조명과 깨끗한 가정"
 ---
 

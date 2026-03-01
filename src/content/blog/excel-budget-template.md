@@ -4,7 +4,7 @@ description: "엑셀로 나만의 가계부를 직접 만드는 방법을 단계
 pubDate: 2026-03-01
 category: "tools"
 tags: ["엑셀가계부", "직장인재테크", "가계부만들기", "스프레드시트"]
-image: "/images/1.webp"
+image: "/images/tools-5.webp"
 imageAlt: "엑셀로 가계부를 작성하는 직장인의 모습"
 ---
 

@@ -4,7 +4,7 @@ description: "첫 연말정산이 막막한 사회초년생을 위해 놓치기 
 pubDate: 2026-03-01
 category: "tax"
 tags: ["사회초년생", "연말정산", "첫직장세금", "공제항목", "절세팁"]
-image: "/images/3.webp"
+image: "/images/tax-2.webp"
 imageAlt: "사회초년생이 연말정산 서류를 검토하는 모습"
 ---
 

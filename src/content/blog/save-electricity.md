@@ -4,7 +4,7 @@ description: "전기요금을 월 3만원 이상 줄일 수 있는 구체적인 
 pubDate: 2026-03-01
 category: "tips"
 tags: ["전기세절약", "생활비절약", "전기요금", "절약팁", "에너지절약"]
-image: "/images/3.webp"
+image: "/images/tips-5.webp"
 imageAlt: "에너지 절약을 위한 밝은 조명과 깨끗한 가정"
 ---
 

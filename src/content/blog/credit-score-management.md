@@ -4,7 +4,7 @@ description: "신용점수의 구조를 이해하고 실제로 점수를 올릴 
 pubDate: 2026-03-01
 category: "saving"
 tags: ["신용점수", "신용관리", "신용등급", "금융생활", "대출금리"]
-image: "/images/4.webp"
+image: "/images/saving-3.webp"
 imageAlt: "신용점수 관리를 상징하는 그래프와 체크리스트"
 ---
 

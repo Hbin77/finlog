@@ -4,7 +4,7 @@ description: "청년도약계좌, 청년내일저축계좌, 청년 우대 적금
 pubDate: 2026-03-01
 category: "saving"
 tags: ["청년도약계좌", "청년내일저축계좌", "청년금융상품", "정부지원", "청년적금"]
-image: "/images/4.webp"
+image: "/images/saving-10.webp"
 imageAlt: "청년 금융상품을 상징하는 통장과 동전 이미지"
 ---
 

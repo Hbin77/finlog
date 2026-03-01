@@ -4,7 +4,7 @@ description: "흩어진 자산을 한눈에 파악하는 방법과 순자산 계
 pubDate: 2026-03-01
 category: "tools"
 tags: ["자산관리", "순자산계산", "자산추적", "재무상태표"]
-image: "/images/1.webp"
+image: "/images/tools-2.webp"
 imageAlt: "자산 현황을 정리하는 스프레드시트 화면"
 ---
 

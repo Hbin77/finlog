@@ -4,7 +4,7 @@ description: "사회초년생이 월급을 효율적으로 관리하는 50-30-20
 pubDate: 2026-03-01
 category: "saving"
 tags: ["월급관리", "사회초년생", "50-30-20규칙", "재테크기초", "저축"]
-image: "/images/4.webp"
+image: "/images/saving-7.webp"
 imageAlt: "월급 예산을 계획하는 노트와 계산기"
 ---
 

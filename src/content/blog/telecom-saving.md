@@ -4,7 +4,7 @@ description: "알뜰폰으로 갈아타면 월 통신비를 절반 이하로 줄
 pubDate: 2026-03-01
 category: "tips"
 tags: ["통신비절약", "알뜰폰", "요금제비교", "생활비절약", "MVNO"]
-image: "/images/3.webp"
+image: "/images/tips-8.webp"
 imageAlt: "에너지 절약을 위한 밝은 조명과 깨끗한 가정"
 ---
 

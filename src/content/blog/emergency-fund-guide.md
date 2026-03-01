@@ -4,7 +4,7 @@ description: "비상금이 필요한 이유, 적정 금액 기준, CMA와 파킹
 pubDate: 2026-03-01
 category: "saving"
 tags: ["비상금", "비상자금", "CMA통장", "파킹통장", "재테크기초"]
-image: "/images/5.webp"
+image: "/images/saving-5.webp"
 imageAlt: "저축과 은행 적금을 상징하는 동전과 저금통"
 ---
 

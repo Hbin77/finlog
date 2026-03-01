@@ -4,7 +4,7 @@ description: "의료비 세액공제 대상 항목, 공제율, 계산법, 가족
 pubDate: 2026-03-01
 category: "tax"
 tags: ["의료비공제", "세액공제", "연말정산", "의료비환급", "절세"]
-image: "/images/3.webp"
+image: "/images/tax-5.webp"
 imageAlt: "의료비 영수증과 세액공제 계산 문서"
 ---
 

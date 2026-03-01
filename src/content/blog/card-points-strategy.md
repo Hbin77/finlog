@@ -4,7 +4,7 @@ description: "카드 포인트를 최대한 많이 쌓고 효율적으로 사용
 pubDate: 2026-03-01
 category: "tips"
 tags: ["카드포인트", "포인트적립", "절약전략", "카드활용"]
-image: "/images/3.webp"
+image: "/images/tips-1.webp"
 imageAlt: "카드 포인트를 확인하고 활용하는 모습"
 ---
 

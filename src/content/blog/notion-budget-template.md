@@ -4,7 +4,7 @@ description: "Notion을 활용한 가계부 만드는 법을 단계별로 안내
 pubDate: 2026-03-01
 category: "tools"
 tags: ["Notion", "가계부", "템플릿", "지출관리"]
-image: "/images/1.webp"
+image: "/images/tools-7.webp"
 imageAlt: "스마트폰 가계부 앱으로 지출을 관리하는 모습"
 ---
 

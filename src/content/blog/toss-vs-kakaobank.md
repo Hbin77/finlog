@@ -4,7 +4,7 @@ description: "토스뱅크, 카카오뱅크, 케이뱅크 세 인터넷은행의
 pubDate: 2026-03-01
 category: "tools"
 tags: ["인터넷은행", "토스뱅크", "카카오뱅크", "케이뱅크"]
-image: "/images/1.webp"
+image: "/images/tools-10.webp"
 imageAlt: "스마트폰 가계부 앱으로 지출을 관리하는 모습"
 ---
 

@@ -4,7 +4,7 @@ description: "해외주식 계좌 개설부터 환전, S&P500·나스닥 ETF 매
 pubDate: 2026-03-01
 category: "investing"
 tags: ["해외주식", "미국ETF", "S&P500", "나스닥", "환전"]
-image: "/images/2.webp"
+image: "/images/investing-10.webp"
 imageAlt: "주식 시장 차트가 표시된 화면"
 ---
 

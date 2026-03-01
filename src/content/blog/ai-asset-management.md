@@ -4,7 +4,7 @@ description: "AI 기반 자산관리 서비스 5개를 수수료, 수익률, 기
 pubDate: 2026-03-01
 category: "tools"
 tags: ["AI자산관리", "로보어드바이저", "자산관리앱", "자동투자"]
-image: "/images/1.webp"
+image: "/images/tools-1.webp"
 imageAlt: "AI 자산관리 앱 화면을 확인하는 투자자"
 ---
 

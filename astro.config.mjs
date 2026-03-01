@@ -4,8 +4,8 @@ import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
 
-// 환경변수로 사이트 URL 설정 가능 (기본값: finlog.kr)
-const siteUrl = process.env.SITE_URL || 'https://finlog.kr';
+// 환경변수로 사이트 URL 설정 가능 (기본값: finlog.site)
+const siteUrl = process.env.SITE_URL || 'https://finlog.site';
 
 // https://astro.build/config
 export default defineConfig({

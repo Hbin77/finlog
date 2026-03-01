@@ -4,7 +4,7 @@ description: "인덱스 펀드와 액티브 펀드의 구조, 수수료, 장기 
 pubDate: 2026-03-01
 category: "investing"
 tags: ["인덱스펀드", "액티브펀드", "패시브투자", "펀드비교", "장기투자"]
-image: "/images/2.webp"
+image: "/images/investing-3.webp"
 imageAlt: "인덱스 펀드와 액티브 펀드 비교 이미지"
 ---
 

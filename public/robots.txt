@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://finlog.kr/sitemap-index.xml
+Sitemap: https://finlog.site/sitemap-index.xml

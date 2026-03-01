@@ -4,7 +4,7 @@ description: "연말정산에서 환급을 극대화하는 7가지 실전 절세
 pubDate: 2026-03-01
 category: "tax"
 tags: ["연말정산", "환급", "절세팁", "세액공제", "소득공제"]
-image: "/images/4.webp"
+image: "/images/tax-9.webp"
 imageAlt: "월급 예산을 계획하는 노트와 계산기"
 ---
 

@@ -4,7 +4,7 @@ description: "소득공제와 세액공제의 차이를 이해하고, 항목별 
 pubDate: 2026-03-01
 category: "tax"
 tags: ["연말정산", "소득공제", "세액공제", "절세", "직장인세금"]
-image: "/images/4.webp"
+image: "/images/tax-10.webp"
 imageAlt: "월급 예산을 계획하는 노트와 계산기"
 ---
 
