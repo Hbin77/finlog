@@ -9,7 +9,7 @@ const { currentPage, totalPages, baseUrl } = Astro.props;
 
 function getPageUrl(page: number): string {
   if (page === 1) return baseUrl;
-  return `${baseUrl}${page}/`;
+  return `${baseUrl}page/${page}/`;
 }
 
 const hasPrev = currentPage > 1;
