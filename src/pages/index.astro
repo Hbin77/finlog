@@ -82,49 +82,123 @@ const valueProps = [
     <div class="hero-ornament hero-ornament--2" aria-hidden="true"></div>
 
     <div class="mx-auto max-w-[var(--container-max-width)] px-4 sm:px-6 lg:px-8 relative z-10">
-      <div class="hero-inner">
-        <div class="hero-badge">
-          <span class="hero-badge__dot" aria-hidden="true"></span>
-          실용 재테크 블로그
+      <div class="hero-layout">
+        <!-- Left: Content -->
+        <div class="hero-inner">
+          <div class="hero-badge">
+            <span class="hero-badge__dot" aria-hidden="true"></span>
+            실용 재테크 블로그
+          </div>
+
+          <h1 class="hero-title">
+            2030 직장인을 위한<br />
+            <span class="hero-title__accent">실용 재테크 가이드</span>
+          </h1>
+
+          <p class="hero-desc">
+            월급 관리, 저축, 투자, 세금, 절약까지.<br class="hidden sm:inline" />
+            복잡한 금융 정보를 쉽고 실용적으로 정리합니다.
+          </p>
+
+          <div class="hero-actions">
+            <a href="/blog/" class="btn-primary">
+              콘텐츠 둘러보기
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
+            <a href="#categories" class="btn-ghost">
+              카테고리 보기
+            </a>
+          </div>
+
+          <!-- Trust indicators -->
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <span class="hero-stat__number" data-counter={allPosts.length}>{allPosts.length}</span>
+              <span class="hero-stat__label">게시글</span>
+            </div>
+            <div class="hero-stat__divider" aria-hidden="true"></div>
+            <div class="hero-stat">
+              <span class="hero-stat__number" data-counter="5">5</span>
+              <span class="hero-stat__label">카테고리</span>
+            </div>
+            <div class="hero-stat__divider" aria-hidden="true"></div>
+            <div class="hero-stat">
+              <span class="hero-stat__number" data-counter="100" data-counter-suffix="%">100%</span>
+              <span class="hero-stat__label">무료 가이드</span>
+            </div>
+          </div>
         </div>
 
-        <h1 class="hero-title">
-          2030 직장인을 위한<br />
-          <span class="hero-title__accent">실용 재테크 가이드</span>
-        </h1>
+        <!-- Right: Financial Illustration -->
+        <div class="hero-visual" aria-hidden="true">
+          <div class="hero-visual__container">
+            <!-- Floating card: Mini chart -->
+            <div class="hero-float-card hero-float-card--chart">
+              <div class="hero-float-card__header">
+                <span class="hero-float-card__dot hero-float-card__dot--green"></span>
+                <span class="hero-float-card__label">수익률</span>
+              </div>
+              <svg class="hero-float-card__chart" viewBox="0 0 120 40" fill="none">
+                <polyline
+                  points="0,35 15,30 30,32 45,25 55,28 70,18 85,15 100,8 115,5"
+                  stroke="#519E8A"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  fill="none"
+                />
+                <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#519E8A" stop-opacity="0.3" />
+                  <stop offset="100%" stop-color="#519E8A" stop-opacity="0" />
+                </linearGradient>
+                <polygon
+                  points="0,35 15,30 30,32 45,25 55,28 70,18 85,15 100,8 115,5 115,40 0,40"
+                  fill="url(#chartGrad)"
+                />
+              </svg>
+              <span class="hero-float-card__trend">+12.4%</span>
+            </div>
 
-        <p class="hero-desc">
-          월급 관리, 저축, 투자, 세금, 절약까지.<br class="hidden sm:inline" />
-          복잡한 금융 정보를 쉽고 실용적으로 정리합니다.
-        </p>
+            <!-- Floating card: Savings -->
+            <div class="hero-float-card hero-float-card--savings">
+              <div class="hero-float-card__icon-sm">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
+                </svg>
+              </div>
+              <div class="hero-float-card__text">
+                <span class="hero-float-card__text-label">월 저축액</span>
+                <span class="hero-float-card__text-value">50만원</span>
+              </div>
+            </div>
 
-        <div class="hero-actions">
-          <a href="/blog/" class="btn-primary">
-            콘텐츠 둘러보기
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </a>
-          <a href="#categories" class="btn-ghost">
-            카테고리 보기
-          </a>
-        </div>
+            <!-- Floating card: Interest rate -->
+            <div class="hero-float-card hero-float-card--rate">
+              <div class="hero-float-card__icon-sm hero-float-card__icon-sm--accent">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
+                </svg>
+              </div>
+              <div class="hero-float-card__text">
+                <span class="hero-float-card__text-label">적금 금리</span>
+                <span class="hero-float-card__text-value">연 4.5%</span>
+              </div>
+            </div>
 
-        <!-- Trust indicators -->
-        <div class="hero-stats">
-          <div class="hero-stat">
-            <span class="hero-stat__number">{allPosts.length}</span>
-            <span class="hero-stat__label">게시글</span>
-          </div>
-          <div class="hero-stat__divider" aria-hidden="true"></div>
-          <div class="hero-stat">
-            <span class="hero-stat__number">5</span>
-            <span class="hero-stat__label">카테고리</span>
-          </div>
-          <div class="hero-stat__divider" aria-hidden="true"></div>
-          <div class="hero-stat">
-            <span class="hero-stat__number">100%</span>
-            <span class="hero-stat__label">무료 가이드</span>
+            <!-- Floating coin icon -->
+            <div class="hero-float-coin">
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                <circle cx="16" cy="16" r="14" fill="#C5C9A4" opacity="0.5" />
+                <circle cx="16" cy="16" r="10" fill="#C5C9A4" opacity="0.8" />
+                <text x="16" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="#5f614b">W</text>
+              </svg>
+            </div>
+
+            <!-- Background decorative circles -->
+            <div class="hero-visual__bg-circle hero-visual__bg-circle--1"></div>
+            <div class="hero-visual__bg-circle hero-visual__bg-circle--2"></div>
           </div>
         </div>
       </div>
@@ -136,14 +210,14 @@ const valueProps = [
        ============================================ -->
   <section class="py-16 md:py-24 bg-[var(--color-neutral-50)]">
     <div class="mx-auto max-w-[var(--container-max-width)] px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-12 md:mb-16">
+      <div class="text-center mb-12 md:mb-16 animate-on-scroll">
         <p class="section-label">핀로그가 드리는 가치</p>
         <h2 class="section-title">똑똑한 재테크, 여기서 시작하세요</h2>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-        {valueProps.map((prop) => (
-          <div class="value-card">
+        {valueProps.map((prop, i) => (
+          <div class={`value-card animate-on-scroll animate-delay-${i + 1}`}>
             <div class="value-card__icon">
               {prop.icon === 'vault' && (
                 <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true">
@@ -180,7 +254,7 @@ const valueProps = [
   {latestPosts.length > 0 && (
     <section class="py-16 md:py-24">
       <div class="mx-auto max-w-[var(--container-max-width)] px-4 sm:px-6 lg:px-8">
-        <div class="flex items-end justify-between mb-10 md:mb-14">
+        <div class="flex items-end justify-between mb-10 md:mb-14 animate-on-scroll">
           <div>
             <p class="section-label">최근 콘텐츠</p>
             <h2 class="section-title">최신 글</h2>
@@ -193,8 +267,10 @@ const valueProps = [
           </a>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {latestPosts.map((post) => (
-            <BlogCard post={post} />
+          {latestPosts.map((post, i) => (
+            <div class={`blog-card-wrap animate-on-scroll animate-delay-${(i % 3) + 1}`}>
+              <BlogCard post={post} />
+            </div>
           ))}
         </div>
       </div>
@@ -206,15 +282,15 @@ const valueProps = [
        ============================================ -->
   <section id="categories" class="py-16 md:py-24 bg-[var(--color-neutral-50)]">
     <div class="mx-auto max-w-[var(--container-max-width)] px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-12 md:mb-16">
+      <div class="text-center mb-12 md:mb-16 animate-on-scroll">
         <p class="section-label">주제별 탐색</p>
         <h2 class="section-title">카테고리</h2>
         <p class="section-subtitle">관심 있는 분야를 선택해 맞춤 콘텐츠를 확인하세요.</p>
       </div>
 
       <div class="category-grid">
-        {categories.map((cat) => (
-          <a href={cat.href} class="category-card" data-category={cat.id}>
+        {categories.map((cat, i) => (
+          <a href={cat.href} class={`category-card animate-on-scroll animate-delay-${i + 1}`} data-category={cat.id}>
             <div class="category-card__icon-wrap" data-category={cat.id}>
               {cat.icon === 'piggy' && (
                 <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true">
@@ -265,7 +341,7 @@ const valueProps = [
        ============================================ -->
   <section class="py-16 md:py-24">
     <div class="mx-auto max-w-[var(--container-max-width)] px-4 sm:px-6 lg:px-8">
-      <div class="cta-card">
+      <div class="cta-card animate-on-scroll">
         <div class="cta-card__inner">
           <div class="cta-card__content">
             <p class="section-label" style="text-align: left;">시작하기</p>
@@ -312,6 +388,13 @@ const valueProps = [
     padding: var(--space-20) 0;
     background-color: var(--color-neutral-50);
     border-bottom: 1px solid var(--color-border);
+    background-size: 400% 400%;
+    animation: hero-bg-shift 20s ease infinite;
+  }
+
+  @keyframes hero-bg-shift {
+    0%, 100% { background-color: var(--color-neutral-50); }
+    50% { background-color: #f5f7f4; }
   }
 
   @media (min-width: 768px) {
@@ -343,8 +426,17 @@ const valueProps = [
     background: radial-gradient(circle, var(--color-secondary-100) 0%, transparent 70%);
   }
 
+  /* Hero 2-column layout */
+  .hero-layout {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+  }
+
   .hero-inner {
     max-width: 720px;
+    flex: 1;
+    min-width: 0;
   }
 
   .hero-badge {
@@ -367,6 +459,12 @@ const valueProps = [
     height: 6px;
     border-radius: 50%;
     background-color: var(--color-secondary-500);
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.4); }
   }
 
   .hero-title {
@@ -386,6 +484,24 @@ const valueProps = [
 
   .hero-title__accent {
     color: var(--color-secondary-600);
+    background: linear-gradient(
+      90deg,
+      var(--color-secondary-600) 0%,
+      var(--color-accent-400) 25%,
+      var(--color-secondary-500) 50%,
+      var(--color-accent-400) 75%,
+      var(--color-secondary-600) 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 6s linear infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
   }
 
   .hero-desc {
@@ -442,6 +558,233 @@ const valueProps = [
     height: 32px;
     background-color: var(--color-border);
   }
+
+  /* ============================================
+     HERO VISUAL (Right Side Illustration)
+     ============================================ */
+  .hero-visual {
+    display: none;
+    flex-shrink: 0;
+    width: 380px;
+  }
+
+  @media (min-width: 1024px) {
+    .hero-visual {
+      display: block;
+    }
+  }
+
+  .hero-visual__container {
+    position: relative;
+    width: 100%;
+    height: 380px;
+  }
+
+  /* Background decorative circles */
+  .hero-visual__bg-circle {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .hero-visual__bg-circle--1 {
+    width: 240px;
+    height: 240px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, var(--color-primary-100) 0%, transparent 70%);
+    opacity: 0.5;
+  }
+
+  .hero-visual__bg-circle--2 {
+    width: 160px;
+    height: 160px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, var(--color-secondary-100) 0%, transparent 70%);
+    opacity: 0.4;
+  }
+
+  /* Floating cards shared styles */
+  .hero-float-card {
+    position: absolute;
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 14px 18px;
+    box-shadow: var(--shadow-md);
+    z-index: 2;
+  }
+
+  /* Chart card */
+  .hero-float-card--chart {
+    top: 10px;
+    left: 20px;
+    width: 180px;
+    animation: float-slow 5s ease-in-out infinite;
+  }
+
+  .hero-float-card__header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .hero-float-card__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .hero-float-card__dot--green {
+    background-color: var(--color-secondary-500);
+  }
+
+  .hero-float-card__label {
+    font-size: 11px;
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-sub);
+    letter-spacing: var(--letter-spacing-wide);
+  }
+
+  .hero-float-card__chart {
+    width: 100%;
+    height: 40px;
+    margin-bottom: 6px;
+  }
+
+  .hero-float-card__trend {
+    font-size: 13px;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-secondary-500);
+  }
+
+  /* Savings card */
+  .hero-float-card--savings {
+    top: 150px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: float-medium 4s ease-in-out 0.5s infinite;
+  }
+
+  .hero-float-card__icon-sm {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    background-color: var(--color-primary-50);
+    color: var(--color-primary-500);
+    flex-shrink: 0;
+  }
+
+  .hero-float-card__icon-sm--accent {
+    background-color: var(--color-secondary-50);
+    color: var(--color-secondary-500);
+  }
+
+  .hero-float-card__text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .hero-float-card__text-label {
+    font-size: 11px;
+    color: var(--color-text-sub);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--letter-spacing-wide);
+  }
+
+  .hero-float-card__text-value {
+    font-size: 15px;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary-800);
+  }
+
+  /* Rate card */
+  .hero-float-card--rate {
+    bottom: 40px;
+    left: 40px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: float-fast 3.5s ease-in-out 1s infinite;
+  }
+
+  /* Floating coin */
+  .hero-float-coin {
+    position: absolute;
+    top: 90px;
+    right: 50px;
+    z-index: 1;
+    animation: float-medium 4.5s ease-in-out 0.8s infinite;
+    opacity: 0.85;
+  }
+
+  /* Floating keyframes */
+  @keyframes float-slow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+
+  @keyframes float-medium {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  @keyframes float-fast {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  /* Mobile hero visual (shown above content on tablet) */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .hero-visual {
+      display: block;
+      width: 100%;
+      margin-bottom: var(--space-8);
+    }
+
+    .hero-layout {
+      flex-direction: column-reverse;
+    }
+
+    .hero-visual__container {
+      height: 200px;
+      max-width: 400px;
+      margin: 0 auto;
+      transform: scale(0.7);
+      transform-origin: center center;
+    }
+  }
+
+  /* ============================================
+     SCROLL ANIMATIONS
+     ============================================ */
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+
+  .animate-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Staggered delays */
+  .animate-delay-1 { transition-delay: 0.1s; }
+  .animate-delay-2 { transition-delay: 0.2s; }
+  .animate-delay-3 { transition-delay: 0.3s; }
+  .animate-delay-4 { transition-delay: 0.4s; }
+  .animate-delay-5 { transition-delay: 0.5s; }
 
   /* ============================================
      SHARED ELEMENTS
@@ -504,6 +847,8 @@ const valueProps = [
     border-radius: var(--radius-md);
     transition: background-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
     box-shadow: 0 1px 3px rgba(81, 158, 138, 0.2);
+    position: relative;
+    overflow: hidden;
   }
 
   .btn-primary:hover {
@@ -546,7 +891,7 @@ const valueProps = [
 
   .value-card:hover {
     box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
+    transform: translateY(-4px);
   }
 
   .value-card__icon {
@@ -573,6 +918,17 @@ const valueProps = [
     font-size: var(--font-size-small);
     color: var(--color-text-sub);
     line-height: var(--line-height-relaxed);
+  }
+
+  /* ============================================
+     BLOG CARD WRAP (hover enhancement)
+     ============================================ */
+  .blog-card-wrap {
+    transition: transform var(--transition-base);
+  }
+
+  .blog-card-wrap:hover {
+    transform: scale(1.02);
   }
 
   /* ============================================
@@ -688,7 +1044,7 @@ const valueProps = [
 
   .category-card:hover .category-card__arrow {
     color: var(--color-secondary-500);
-    transform: translateX(4px);
+    transform: translateX(6px);
   }
 
   /* ============================================
@@ -775,6 +1131,7 @@ const valueProps = [
     left: 50%;
     transform: translate(-50%, -50%);
     opacity: 0.3;
+    animation: ring-rotate 30s linear infinite;
   }
 
   .cta-visual-ring--2 {
@@ -784,6 +1141,7 @@ const valueProps = [
     left: 50%;
     transform: translate(-50%, -50%);
     opacity: 0.5;
+    animation: ring-rotate 25s linear infinite reverse;
   }
 
   .cta-visual-ring--3 {
@@ -794,6 +1152,12 @@ const valueProps = [
     transform: translate(-50%, -50%);
     background-color: var(--color-primary-100);
     opacity: 0.6;
+    animation: ring-rotate 20s linear infinite;
+  }
+
+  @keyframes ring-rotate {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
   }
 
   .cta-visual-icon {
@@ -801,4 +1165,153 @@ const valueProps = [
     z-index: 1;
     color: var(--color-primary-400);
   }
+
+  /* ============================================
+     ACCESSIBILITY: Reduced Motion
+     ============================================ */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-badge__dot,
+    .hero-float-card--chart,
+    .hero-float-card--savings,
+    .hero-float-card--rate,
+    .hero-float-coin,
+    .cta-visual-ring--1,
+    .cta-visual-ring--2,
+    .cta-visual-ring--3,
+    .hero-title__accent {
+      animation: none;
+    }
+
+    .hero-section {
+      animation: none;
+    }
+
+    .animate-on-scroll {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+
+    .value-card,
+    .category-card,
+    .blog-card-wrap,
+    .category-card__arrow,
+    .btn-primary {
+      transition: none;
+    }
+  }
+
+  /* ============================================
+     MOBILE: Reduce animation complexity
+     ============================================ */
+  @media (max-width: 767px) {
+    .hero-float-card--chart,
+    .hero-float-card--savings,
+    .hero-float-card--rate,
+    .hero-float-coin {
+      animation-duration: 8s;
+    }
+
+    .animate-on-scroll {
+      transform: translateY(20px);
+    }
+
+    .hero-section {
+      animation: none;
+    }
+  }
 </style>
+
+<script>
+  /* ============================================
+     Scroll Animation (IntersectionObserver)
+     ============================================ */
+  (function () {
+    const animatedElements = document.querySelectorAll('.animate-on-scroll');
+
+    if (!animatedElements.length) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      animatedElements.forEach(function (el) {
+        el.classList.add('is-visible');
+      });
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.15,
+        rootMargin: '0px 0px -50px 0px',
+      }
+    );
+
+    animatedElements.forEach(function (el) {
+      observer.observe(el);
+    });
+  })();
+
+  /* ============================================
+     Number Counter Animation
+     ============================================ */
+  (function () {
+    var counterElements = document.querySelectorAll('[data-counter]');
+    if (!counterElements.length) return;
+
+    var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    function easeOutQuad(t) {
+      return t * (2 - t);
+    }
+
+    function animateCounter(el) {
+      var target = parseInt(el.getAttribute('data-counter'), 10);
+      var suffix = el.getAttribute('data-counter-suffix') || '';
+      var duration = 1500;
+      var startTime = null;
+
+      function step(currentTime) {
+        if (!startTime) startTime = currentTime;
+        var elapsed = currentTime - startTime;
+        var progress = Math.min(elapsed / duration, 1);
+        var easedProgress = easeOutQuad(progress);
+        var currentValue = Math.round(easedProgress * target);
+
+        el.textContent = currentValue + suffix;
+
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        }
+      }
+
+      requestAnimationFrame(step);
+    }
+
+    var counterObserver = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            animateCounter(entry.target);
+            counterObserver.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.5,
+      }
+    );
+
+    counterElements.forEach(function (el) {
+      counterObserver.observe(el);
+    });
+  })();
+</script>
