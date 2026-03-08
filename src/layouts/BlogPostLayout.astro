@@ -4,6 +4,7 @@ import Breadcrumb from '../components/Breadcrumb.astro';
 import CategoryTag from '../components/CategoryTag.astro';
 import TableOfContents from '../components/TableOfContents.astro';
 import RelatedPosts from '../components/RelatedPosts.astro';
+import AdUnit from '../components/AdUnit.astro';
 import type { CollectionEntry } from 'astro:content';
 import { getCollection } from 'astro:content';
 
@@ -101,10 +102,16 @@ const breadcrumbItems = [
           <TableOfContents headings={headings} />
         </div>
 
+        <!-- Ad: before content -->
+        <AdUnit class="my-6" />
+
         <!-- Article body (uses .prose styles from global.css) -->
         <div class="prose max-w-none">
           <slot />
         </div>
+
+        <!-- Ad: after content -->
+        <AdUnit class="my-6" />
 
         <!-- Related posts -->
         <RelatedPosts posts={relatedPosts} />
@@ -115,6 +122,9 @@ const breadcrumbItems = [
         <div class="sticky top-24 space-y-8">
           <!-- Table of Contents -->
           <TableOfContents headings={headings} />
+
+          <!-- Ad: sidebar -->
+          <AdUnit />
         </div>
       </aside>
     </div>
