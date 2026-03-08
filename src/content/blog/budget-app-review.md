@@ -1,7 +1,7 @@
 ---
 title: "가계부 앱 추천 TOP 5: 기능 비교 및 사용 후기"
 description: "뱅크샐러드, 토스, 카카오페이 등 인기 가계부 앱 5개를 직접 사용하고 기능, 편의성, 장단점을 비교 분석했습니다."
-pubDate: 2026-03-01
+pubDate: 2025-12-01
 category: "tools"
 tags: ["가계부앱", "뱅크샐러드", "토스", "카카오페이", "자산관리"]
 image: "/images/tools-3.webp"

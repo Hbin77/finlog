@@ -1,7 +1,7 @@
 ---
 title: "해외 주식 투자 시작하기: 미국 ETF 입문 가이드"
 description: "해외주식 계좌 개설부터 환전, S&P500·나스닥 ETF 매수, 세금 신고까지 미국 주식 투자 시작법을 정리했습니다."
-pubDate: 2026-03-01
+pubDate: 2026-01-22
 category: "investing"
 tags: ["해외주식", "미국ETF", "S&P500", "나스닥", "환전"]
 image: "/images/investing-10.webp"

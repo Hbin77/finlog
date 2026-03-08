@@ -1,7 +1,7 @@
 ---
 title: "로보어드바이저 비교 리뷰: 2026년 주요 서비스 5선"
 description: "국내 주요 로보어드바이저 5개 서비스의 수수료, 투자 전략을 비교하고 초보 투자자에게 적합한 서비스 선택 기준을 정리합니다."
-pubDate: 2026-03-01
+pubDate: 2026-02-06
 category: "investing"
 tags: ["로보어드바이저", "자동투자", "핀테크", "자산관리", "투자추천"]
 image: "/images/investing-8.webp"

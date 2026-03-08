@@ -1,7 +1,7 @@
 ---
 title: "주식 초보가 알아야 할 기본 용어 30가지"
 description: "PER, PBR, EPS, 시가총액 등 주식 투자를 시작하기 전에 반드시 알아야 할 핵심 용어 30개를 쉽게 정리했습니다."
-pubDate: 2026-03-01
+pubDate: 2026-01-17
 category: "investing"
 tags: ["주식용어", "주식초보", "투자입문", "PER", "시가총액"]
 image: "/images/investing-9.webp"

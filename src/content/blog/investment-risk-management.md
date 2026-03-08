@@ -1,7 +1,7 @@
 ---
 title: "투자 리스크 관리: 초보자가 반드시 알아야 할 5가지 원칙"
 description: "분산 투자, 자산 배분, 손절 기준 등 초보 투자자가 반드시 익혀야 할 리스크 관리 5가지 핵심 원칙을 실전 사례와 함께 정리합니다."
-pubDate: 2026-03-01
+pubDate: 2026-02-02
 category: "investing"
 tags: ["리스크관리", "분산투자", "자산배분", "투자원칙", "초보투자"]
 image: "/images/investing-5.webp"

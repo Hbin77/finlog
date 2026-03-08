@@ -1,7 +1,7 @@
 ---
 title: "연금저축펀드 vs IRP: 어디에 먼저 넣어야 할까?"
 description: "연금저축펀드와 IRP의 차이점, 세액공제 한도, 투자 가능 상품, 직장인을 위한 최적 납입 전략을 비교합니다."
-pubDate: 2026-03-01
+pubDate: 2026-02-14
 category: "investing"
 tags: ["연금저축", "IRP", "세액공제", "노후준비", "절세"]
 image: "/images/investing-7.webp"

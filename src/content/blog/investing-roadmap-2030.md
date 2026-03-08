@@ -1,7 +1,7 @@
 ---
 title: "2030 직장인 투자 로드맵: 단계별 투자 전략 가이드"
 description: "사회초년생부터 30대 중반까지, 연차별 투자 전략과 자산 배분 로드맵을 구체적인 금액과 계좌 활용법과 함께 안내합니다."
-pubDate: 2026-03-01
+pubDate: 2026-02-04
 category: "investing"
 tags: ["투자로드맵", "2030세대", "직장인투자", "자산배분", "재테크전략"]
 image: "/images/investing-4.webp"

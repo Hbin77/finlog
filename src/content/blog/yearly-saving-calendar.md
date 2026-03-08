@@ -1,7 +1,7 @@
 ---
 title: "월별 절약 캘린더: 시기별 할인과 세일 일정 총정리"
 description: "1월부터 12월까지 월별 주요 세일, 할인 행사, 절약 기회를 정리한 연간 절약 캘린더입니다."
-pubDate: 2026-03-01
+pubDate: 2026-03-05
 category: "tips"
 tags: ["월별세일", "절약캘린더", "할인일정", "쇼핑절약"]
 image: "/images/tips-10.webp"

@@ -1,7 +1,7 @@
 ---
 title: "ETF 투자 입문 가이드: 처음 시작하는 분산 투자"
 description: "ETF가 무엇인지, 왜 초보 투자자에게 적합한지, 어떻게 시작하는지를 계좌 개설부터 매수까지 단계별로 설명합니다."
-pubDate: 2026-03-01
+pubDate: 2026-01-24
 category: "investing"
 tags: ["ETF", "분산투자", "투자입문", "주식초보", "인덱스펀드"]
 image: "/images/investing-2.webp"

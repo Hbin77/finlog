@@ -1,7 +1,7 @@
 ---
 title: "통신비 절약 가이드: 알뜰폰 요금제 비교 2026"
 description: "알뜰폰으로 갈아타면 월 통신비를 절반 이하로 줄일 수 있습니다. 요금제 비교와 전환 방법을 안내합니다."
-pubDate: 2026-03-01
+pubDate: 2025-12-15
 category: "tips"
 tags: ["통신비절약", "알뜰폰", "요금제비교", "생활비절약", "MVNO"]
 image: "/images/tips-8.webp"

@@ -1,7 +1,7 @@
 ---
 title: "Notion으로 가계부 만들기: 무료 템플릿 활용법"
 description: "Notion을 활용한 가계부 만드는 법을 단계별로 안내합니다. 카테고리 분류, 자동 합계, 무료 템플릿까지 정리했습니다."
-pubDate: 2026-03-01
+pubDate: 2025-12-05
 category: "tools"
 tags: ["Notion", "가계부", "템플릿", "지출관리"]
 image: "/images/tools-7.webp"

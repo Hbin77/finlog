@@ -1,7 +1,7 @@
 ---
 title: "중고거래로 절약하기: 당근마켓 활용 팁과 주의사항"
 description: "중고거래로 월 수만원을 절약하는 방법과 당근마켓 활용 팁, 사기 방지 주의사항을 정리했습니다."
-pubDate: 2026-03-01
+pubDate: 2025-12-21
 category: "tips"
 tags: ["중고거래", "당근마켓", "절약", "중고물품"]
 image: "/images/tips-6.webp"

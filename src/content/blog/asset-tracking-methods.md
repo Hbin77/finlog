@@ -1,7 +1,7 @@
 ---
 title: "자산 현황 파악하기: 순자산 계산법과 추적 도구 추천"
 description: "흩어진 자산을 한눈에 파악하는 방법과 순자산 계산법, 자산 추적에 유용한 앱과 도구를 소개합니다."
-pubDate: 2026-03-01
+pubDate: 2026-02-12
 category: "tools"
 tags: ["자산관리", "순자산계산", "자산추적", "재무상태표"]
 image: "/images/tools-2.webp"

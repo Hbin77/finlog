@@ -1,7 +1,7 @@
 ---
 title: "구독 서비스 관리법: 불필요한 결제 정리하기"
 description: "잊고 있던 구독 서비스를 찾아내고, 체계적으로 관리하여 월 고정 지출을 줄이는 방법을 안내합니다."
-pubDate: 2026-03-01
+pubDate: 2025-12-08
 category: "tools"
 tags: ["구독관리", "고정비절약", "구독서비스", "지출관리"]
 image: "/images/tools-9.webp"

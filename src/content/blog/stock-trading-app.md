@@ -1,7 +1,7 @@
 ---
 title: "주식 거래 앱 비교: 수수료, 기능, 사용성 총정리"
 description: "2026년 주요 증권사 앱 6개의 수수료, UI, 기능을 비교하고 투자 스타일별 최적의 앱을 추천합니다."
-pubDate: 2026-03-01
+pubDate: 2026-01-19
 category: "tools"
 tags: ["주식앱", "증권사비교", "주식수수료", "모바일투자"]
 image: "/images/tools-8.webp"

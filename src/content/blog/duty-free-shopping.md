@@ -1,7 +1,7 @@
 ---
 title: "면세점 쇼핑 절약법: 실속 있는 구매 전략"
 description: "면세점에서 실속 있게 쇼핑하는 방법을 정리했습니다. 사전 할인, 적립금 활용, 면세 한도까지 총정리."
-pubDate: 2026-03-01
+pubDate: 2026-03-03
 category: "tips"
 tags: ["면세점쇼핑", "면세한도", "해외여행절약", "쇼핑절약"]
 image: "/images/tips-2.webp"

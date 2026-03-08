@@ -1,7 +1,7 @@
 ---
 title: "연금저축으로 세액공제 받는 법: 한도와 계산 예시"
 description: "연금저축과 IRP의 세액공제 한도, 소득별 공제율, 실제 계산 예시로 절세 효과를 구체적으로 알려드립니다."
-pubDate: 2026-03-01
+pubDate: 2026-01-14
 category: "tax"
 tags: ["연금저축", "세액공제", "IRP", "절세", "노후준비"]
 image: "/images/tax-6.webp"

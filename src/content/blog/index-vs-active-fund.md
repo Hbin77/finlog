@@ -1,7 +1,7 @@
 ---
 title: "인덱스 펀드 vs 액티브 펀드: 초보 투자자는 어디에?"
 description: "인덱스 펀드와 액티브 펀드의 구조, 수수료, 장기 성과를 비교하고 초보 투자자에게 맞는 선택 기준을 제시합니다."
-pubDate: 2026-03-01
+pubDate: 2026-01-27
 category: "investing"
 tags: ["인덱스펀드", "액티브펀드", "패시브투자", "펀드비교", "장기투자"]
 image: "/images/investing-3.webp"

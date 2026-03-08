@@ -1,7 +1,7 @@
 ---
 title: "AI 자산관리 앱 비교: 2026년 추천 서비스"
 description: "AI 기반 자산관리 서비스 5개를 수수료, 수익률, 기능 기준으로 비교하고 투자 성향별 추천을 정리했습니다."
-pubDate: 2026-03-01
+pubDate: 2026-02-09
 category: "tools"
 tags: ["AI자산관리", "로보어드바이저", "자산관리앱", "자동투자"]
 image: "/images/tools-1.webp"

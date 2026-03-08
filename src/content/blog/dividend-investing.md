@@ -1,7 +1,7 @@
 ---
 title: "배당주 투자 입문: 월배당 ETF로 현금흐름 만들기"
 description: "배당주의 개념부터 배당률 계산법, 월배당 ETF 비교, 배당 재투자 전략까지 초보자를 위한 배당 투자 가이드입니다."
-pubDate: 2026-03-01
+pubDate: 2026-01-29
 category: "investing"
 tags: ["배당주", "월배당ETF", "배당투자", "현금흐름", "투자입문"]
 image: "/images/investing-1.webp"
