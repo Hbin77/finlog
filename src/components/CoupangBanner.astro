@@ -1,0 +1,60 @@
+---
+interface Props {
+  /** 쿠팡 파트너스 ID */
+  partnerId?: string;
+  /** 쿠팡 파트너스 서브 ID (선택) */
+  subId?: string;
+}
+
+// TODO: partnerId를 실제 쿠팡 파트너스 ID로 교체하세요
+// TODO: trackingCode를 실제 트래킹 코드로 교체하세요
+const {
+  partnerId = "AF1962827",
+  subId = "",
+} = Astro.props;
+---
+
+<div class="coupang-banner-wrapper">
+  <div class="coupang-banner-container" id="coupang-banner"></div>
+  <p class="coupang-disclosure">
+    이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.
+  </p>
+</div>
+
+<script define:vars={{ partnerId, subId }}>
+  // 쿠팡 파트너스 배너 로드
+  const script = document.createElement('script');
+  script.src = 'https://ads-partners.coupang.com/g.js';
+  script.async = true;
+  script.onload = () => {
+    new PartnersCoupang.G({
+      id: partnerId,
+      template: "carousel",
+      trackingCode: "AF1962827",
+      subId: subId,
+      width: "100%",
+      height: "auto",
+    });
+  };
+  document.getElementById('coupang-banner')?.appendChild(script);
+</script>
+
+<style>
+  .coupang-banner-wrapper {
+    margin: 2rem auto;
+    max-width: 100%;
+  }
+
+  .coupang-banner-container {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .coupang-disclosure {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: #999;
+    text-align: center;
+    line-height: 1.4;
+  }
+</style>

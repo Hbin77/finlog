@@ -4,6 +4,8 @@ import Breadcrumb from '../components/Breadcrumb.astro';
 import CategoryTag from '../components/CategoryTag.astro';
 import TableOfContents from '../components/TableOfContents.astro';
 import RelatedPosts from '../components/RelatedPosts.astro';
+import KakaoAdfit from '../components/KakaoAdfit.astro';
+import CoupangBanner from '../components/CoupangBanner.astro';
 
 import type { CollectionEntry } from 'astro:content';
 import { getCollection } from 'astro:content';
@@ -107,8 +109,14 @@ const breadcrumbItems = [
           <slot />
         </div>
 
+        <!-- 카카오 애드핏 광고 -->
+        <KakaoAdfit />
+
         <!-- Related posts -->
         <RelatedPosts posts={relatedPosts} />
+
+        <!-- 쿠팡 파트너스 배너 -->
+        <CoupangBanner />
       </article>
 
       <!-- Sidebar (desktop only) -->

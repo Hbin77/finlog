@@ -1,0 +1,36 @@
+---
+interface Props {
+  /** 카카오 애드핏 광고 단위 ID (예: DAN-XXXXXXXXXX) */
+  adUnitId?: string;
+  width?: number;
+  height?: number;
+}
+
+// TODO: adUnitId를 실제 카카오 애드핏 광고 단위 ID로 교체하세요
+const {
+  adUnitId = "DAN-wMmzFKVuQFxRgxPU",
+  width = 320,
+  height = 100,
+} = Astro.props;
+---
+
+<div class="kakao-adfit-wrapper">
+  <ins
+    class="kakao_ad_area"
+    style="display:none;"
+    data-ad-unit={adUnitId}
+    data-ad-width={String(width)}
+    data-ad-height={String(height)}
+  ></ins>
+  <script async type="text/javascript" src="https://t1.daumcdn.net/kas/static/ba.min.js"></script>
+</div>
+
+<style>
+  .kakao-adfit-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 2rem auto;
+    max-width: 100%;
+    overflow: hidden;
+  }
+</style>
