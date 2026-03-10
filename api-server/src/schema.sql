@@ -3,16 +3,25 @@ CREATE TABLE IF NOT EXISTS users (
   provider VARCHAR(20) NOT NULL,
   provider_id VARCHAR(255) NOT NULL,
   email VARCHAR(255),
+  password_hash VARCHAR(255),
   nickname VARCHAR(100) NOT NULL,
   avatar_url TEXT,
+  bio TEXT DEFAULT '',
+  email_verified BOOLEAN DEFAULT FALSE,
+  verification_token VARCHAR(255),
+  verification_expires TIMESTAMPTZ,
+  reset_token VARCHAR(255),
+  reset_expires TIMESTAMPTZ,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   UNIQUE(provider, provider_id)
 );
 
+CREATE UNIQUE INDEX IF NOT EXISTS idx_users_email_local ON users(email) WHERE provider = 'local';
+
 CREATE TABLE IF NOT EXISTS posts (
   id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  category VARCHAR(20) NOT NULL CHECK (category IN ('saving','investing','tax','frugal','tools','general')),
+  category VARCHAR(20) NOT NULL,
   title VARCHAR(200) NOT NULL,
   body TEXT NOT NULL,
   likes INTEGER DEFAULT 0,

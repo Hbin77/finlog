@@ -1,0 +1,293 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="마이페이지 | 핀로그" description="내 프로필과 활동 내역을 확인하세요.">
+  <section style="max-width:720px;margin:0 auto;padding:2.5rem 1rem 4rem;">
+
+    <!-- Not logged in -->
+    <div id="not-logged-in" style="display:none;text-align:center;padding:4rem 1rem;">
+      <svg width="48" height="48" fill="none" stroke="#ccc" viewBox="0 0 24 24" style="margin:0 auto 1rem;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+      <p style="font-size:1.1rem;color:var(--color-neutral-500);margin-bottom:1.5rem;">로그인이 필요합니다.</p>
+      <button onclick="openAuthModal('login')" style="padding:0.6rem 1.5rem;background:var(--color-primary-500);color:white;border:none;border-radius:10px;font-size:0.9rem;font-weight:600;cursor:pointer;">로그인</button>
+    </div>
+
+    <!-- Profile section -->
+    <div id="profile-section" style="display:none;">
+      <!-- Profile card -->
+      <div style="background:white;border:1px solid var(--color-border);border-radius:16px;padding:2rem;margin-bottom:2rem;">
+        <div style="display:flex;align-items:center;gap:1.25rem;margin-bottom:1.5rem;">
+          <div id="profile-avatar" style="width:64px;height:64px;border-radius:50%;background:var(--color-primary-100);display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:700;color:var(--color-primary-600);overflow:hidden;">
+          </div>
+          <div style="flex:1;">
+            <h1 id="profile-name" style="font-size:1.35rem;font-weight:800;color:var(--color-neutral-900);margin-bottom:0.25rem;"></h1>
+            <p id="profile-email" style="font-size:0.85rem;color:var(--color-neutral-500);"></p>
+            <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+              <span id="profile-provider" style="font-size:0.7rem;padding:0.15rem 0.5rem;border-radius:999px;background:#f1f5f9;color:#475569;font-weight:600;"></span>
+              <span id="profile-date" style="font-size:0.7rem;color:var(--color-neutral-400);"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1.5rem;">
+          <div style="text-align:center;padding:1rem;background:var(--color-primary-50);border-radius:12px;">
+            <div id="stat-posts" style="font-size:1.5rem;font-weight:800;color:var(--color-primary-600);">0</div>
+            <div style="font-size:0.78rem;color:var(--color-neutral-500);">작성한 글</div>
+          </div>
+          <div style="text-align:center;padding:1rem;background:#fef3c7;border-radius:12px;">
+            <div id="stat-comments" style="font-size:1.5rem;font-weight:800;color:#d97706;">0</div>
+            <div style="font-size:0.78rem;color:var(--color-neutral-500);">작성한 댓글</div>
+          </div>
+        </div>
+
+        <!-- Bio -->
+        <div id="profile-bio-section">
+          <p id="profile-bio" style="font-size:0.88rem;color:var(--color-neutral-600);line-height:1.6;"></p>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div style="display:flex;gap:0;margin-bottom:1.5rem;border-bottom:2px solid #f0f0f0;">
+        <button class="mypage-tab active" data-tab="posts" style="flex:1;padding:0.7rem 0;font-size:0.9rem;font-weight:600;border:none;background:none;cursor:pointer;">내 게시글</button>
+        <button class="mypage-tab" data-tab="comments" style="flex:1;padding:0.7rem 0;font-size:0.9rem;font-weight:600;border:none;background:none;cursor:pointer;">내 댓글</button>
+        <button class="mypage-tab" data-tab="settings" style="flex:1;padding:0.7rem 0;font-size:0.9rem;font-weight:600;border:none;background:none;cursor:pointer;">설정</button>
+      </div>
+
+      <!-- My Posts -->
+      <div id="tab-posts" class="mypage-panel">
+        <div id="my-posts-list"></div>
+      </div>
+
+      <!-- My Comments -->
+      <div id="tab-comments" class="mypage-panel" style="display:none;">
+        <div id="my-comments-list"></div>
+      </div>
+
+      <!-- Settings -->
+      <div id="tab-settings" class="mypage-panel" style="display:none;">
+        <!-- Edit profile -->
+        <div style="background:white;border:1px solid var(--color-border);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem;">
+          <h3 style="font-size:1rem;font-weight:700;color:var(--color-neutral-800);margin-bottom:1rem;">프로필 수정</h3>
+          <div id="settings-msg" style="display:none;margin-bottom:1rem;padding:0.5rem 0.75rem;border-radius:8px;font-size:0.82rem;"></div>
+          <div style="margin-bottom:1rem;">
+            <label style="display:block;font-size:0.8rem;font-weight:600;color:#555;margin-bottom:0.3rem;">닉네임</label>
+            <input id="edit-nickname" type="text" maxlength="20" style="width:100%;padding:0.55rem 0.75rem;border:1px solid #ddd;border-radius:8px;font-size:0.9rem;box-sizing:border-box;" />
+          </div>
+          <div style="margin-bottom:1rem;">
+            <label style="display:block;font-size:0.8rem;font-weight:600;color:#555;margin-bottom:0.3rem;">한줄 소개</label>
+            <input id="edit-bio" type="text" maxlength="200" placeholder="나를 소개해주세요 (200자)" style="width:100%;padding:0.55rem 0.75rem;border:1px solid #ddd;border-radius:8px;font-size:0.9rem;box-sizing:border-box;" />
+          </div>
+          <button onclick="saveProfile()" style="padding:0.55rem 1.25rem;background:var(--color-primary-500);color:white;border:none;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer;">저장</button>
+        </div>
+
+        <!-- Change password (local only) -->
+        <div id="password-section" style="display:none;background:white;border:1px solid var(--color-border);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem;">
+          <h3 style="font-size:1rem;font-weight:700;color:var(--color-neutral-800);margin-bottom:1rem;">비밀번호 변경</h3>
+          <div id="pw-msg" style="display:none;margin-bottom:1rem;padding:0.5rem 0.75rem;border-radius:8px;font-size:0.82rem;"></div>
+          <div style="margin-bottom:1rem;">
+            <label style="display:block;font-size:0.8rem;font-weight:600;color:#555;margin-bottom:0.3rem;">현재 비밀번호</label>
+            <input id="pw-current" type="password" style="width:100%;padding:0.55rem 0.75rem;border:1px solid #ddd;border-radius:8px;font-size:0.9rem;box-sizing:border-box;" />
+          </div>
+          <div style="margin-bottom:1rem;">
+            <label style="display:block;font-size:0.8rem;font-weight:600;color:#555;margin-bottom:0.3rem;">새 비밀번호</label>
+            <input id="pw-new" type="password" placeholder="8자 이상" style="width:100%;padding:0.55rem 0.75rem;border:1px solid #ddd;border-radius:8px;font-size:0.9rem;box-sizing:border-box;" />
+          </div>
+          <button onclick="changePassword()" style="padding:0.55rem 1.25rem;background:var(--color-primary-500);color:white;border:none;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer;">변경</button>
+        </div>
+
+        <!-- Danger zone -->
+        <div style="background:white;border:1px solid #fca5a5;border-radius:14px;padding:1.5rem;">
+          <h3 style="font-size:1rem;font-weight:700;color:#dc2626;margin-bottom:0.5rem;">계정 삭제</h3>
+          <p style="font-size:0.82rem;color:var(--color-neutral-500);margin-bottom:1rem;">계정을 삭제하면 모든 데이터가 영구적으로 삭제됩니다.</p>
+          <button onclick="deleteAccount()" style="padding:0.5rem 1rem;background:#fef2f2;color:#dc2626;border:1px solid #fca5a5;border-radius:8px;font-size:0.82rem;font-weight:600;cursor:pointer;">계정 삭제</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    var _myUser = null;
+
+    function formatDate(d) {
+      var dt = new Date(d);
+      return dt.getFullYear() + '.' + String(dt.getMonth()+1).padStart(2,'0') + '.' + String(dt.getDate()).padStart(2,'0');
+    }
+    function escapeHtml(s) {
+      if (!s) return '';
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function loadProfile() {
+      fetch('/api/users/me', { credentials: 'include' })
+        .then(function(r) {
+          if (!r.ok) throw new Error('Not logged in');
+          return r.json();
+        })
+        .then(function(data) {
+          _myUser = data.user;
+          document.getElementById('not-logged-in').style.display = 'none';
+          document.getElementById('profile-section').style.display = 'block';
+
+          var avatar = document.getElementById('profile-avatar');
+          if (_myUser.avatar_url) {
+            avatar.innerHTML = '<img src="' + _myUser.avatar_url + '" style="width:100%;height:100%;object-fit:cover;" />';
+          } else {
+            avatar.textContent = (_myUser.nickname || '?')[0];
+          }
+
+          document.getElementById('profile-name').textContent = _myUser.nickname;
+          document.getElementById('profile-email').textContent = _myUser.email || '';
+          document.getElementById('stat-posts').textContent = _myUser.post_count || 0;
+          document.getElementById('stat-comments').textContent = _myUser.comment_count || 0;
+
+          var providerLabels = { local: '이메일', google: 'Google', kakao: '카카오' };
+          document.getElementById('profile-provider').textContent = providerLabels[_myUser.provider] || _myUser.provider;
+          document.getElementById('profile-date').textContent = formatDate(_myUser.created_at) + ' 가입';
+
+          document.getElementById('profile-bio').textContent = _myUser.bio || '소개가 없습니다.';
+          document.getElementById('edit-nickname').value = _myUser.nickname;
+          document.getElementById('edit-bio').value = _myUser.bio || '';
+
+          if (_myUser.provider === 'local') {
+            document.getElementById('password-section').style.display = 'block';
+          }
+
+          loadMyPosts();
+          loadMyComments();
+        })
+        .catch(function() {
+          document.getElementById('not-logged-in').style.display = 'block';
+          document.getElementById('profile-section').style.display = 'none';
+        });
+    }
+
+    function loadMyPosts() {
+      fetch('/api/users/me/posts', { credentials: 'include' })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          var el = document.getElementById('my-posts-list');
+          var posts = data.posts || [];
+          if (!posts.length) {
+            el.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--color-neutral-400);font-size:0.9rem;">작성한 게시글이 없습니다.</div>';
+            return;
+          }
+          var html = '';
+          posts.forEach(function(p) {
+            html += '<div style="background:white;border:1px solid var(--color-border);border-radius:12px;padding:1rem 1.25rem;margin-bottom:0.75rem;cursor:pointer;" onclick="location.href=\'/community/\'">' +
+              '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;">' +
+                '<span style="font-size:0.72rem;padding:0.15rem 0.5rem;border-radius:999px;background:var(--color-primary-50);color:var(--color-primary-600);font-weight:600;">' + escapeHtml(p.category) + '</span>' +
+                '<span style="font-size:0.72rem;color:var(--color-neutral-400);">' + formatDate(p.created_at) + '</span>' +
+              '</div>' +
+              '<h3 style="font-size:0.95rem;font-weight:700;color:var(--color-neutral-800);margin-bottom:0.3rem;">' + escapeHtml(p.title) + '</h3>' +
+              '<p style="font-size:0.82rem;color:var(--color-neutral-500);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escapeHtml(p.body.substring(0,80)) + '</p>' +
+            '</div>';
+          });
+          el.innerHTML = html;
+        });
+    }
+
+    function loadMyComments() {
+      fetch('/api/users/me/comments', { credentials: 'include' })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          var el = document.getElementById('my-comments-list');
+          var comments = data.comments || [];
+          if (!comments.length) {
+            el.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--color-neutral-400);font-size:0.9rem;">작성한 댓글이 없습니다.</div>';
+            return;
+          }
+          var html = '';
+          comments.forEach(function(c) {
+            html += '<div style="background:white;border:1px solid var(--color-border);border-radius:12px;padding:1rem 1.25rem;margin-bottom:0.75rem;">' +
+              '<div style="font-size:0.78rem;color:var(--color-neutral-400);margin-bottom:0.4rem;">' + escapeHtml(c.post_title) + ' · ' + formatDate(c.created_at) + '</div>' +
+              '<p style="font-size:0.88rem;color:var(--color-neutral-700);line-height:1.5;">' + escapeHtml(c.body) + '</p>' +
+            '</div>';
+          });
+          el.innerHTML = html;
+        });
+    }
+
+    function settingsMsg(msg, isError) {
+      var el = document.getElementById('settings-msg');
+      el.textContent = msg;
+      el.style.display = 'block';
+      el.style.background = isError ? '#fef2f2' : '#f0fdf4';
+      el.style.color = isError ? '#dc2626' : '#16a34a';
+    }
+
+    function saveProfile() {
+      var nickname = document.getElementById('edit-nickname').value.trim();
+      var bio = document.getElementById('edit-bio').value.trim();
+      fetch('/api/users/me', {
+        method: 'PUT', credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nickname: nickname, bio: bio })
+      })
+      .then(function(r) { return r.json().then(function(d) { return { ok: r.ok, data: d }; }); })
+      .then(function(res) {
+        if (res.ok) {
+          settingsMsg('프로필이 수정되었습니다.', false);
+          loadProfile();
+        } else {
+          settingsMsg(res.data.error || '수정에 실패했습니다.', true);
+        }
+      });
+    }
+
+    function changePassword() {
+      var current = document.getElementById('pw-current').value;
+      var newPw = document.getElementById('pw-new').value;
+      var el = document.getElementById('pw-msg');
+      fetch('/api/users/me/password', {
+        method: 'PUT', credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ currentPassword: current, newPassword: newPw })
+      })
+      .then(function(r) { return r.json().then(function(d) { return { ok: r.ok, data: d }; }); })
+      .then(function(res) {
+        el.textContent = res.data.message || res.data.error;
+        el.style.display = 'block';
+        el.style.background = res.ok ? '#f0fdf4' : '#fef2f2';
+        el.style.color = res.ok ? '#16a34a' : '#dc2626';
+        if (res.ok) { document.getElementById('pw-current').value = ''; document.getElementById('pw-new').value = ''; }
+      });
+    }
+
+    function deleteAccount() {
+      if (!confirm('정말로 계정을 삭제하시겠습니까? 모든 게시글과 댓글이 삭제됩니다.')) return;
+      if (!confirm('이 작업은 되돌릴 수 없습니다. 계속하시겠습니까?')) return;
+      fetch('/api/users/me', { method: 'DELETE', credentials: 'include' })
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          if (d.success) { alert('계정이 삭제되었습니다.'); location.href = '/'; }
+          else alert('계정 삭제에 실패했습니다.');
+        });
+    }
+
+    // Tab switching
+    document.querySelectorAll('.mypage-tab').forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.mypage-tab').forEach(function(t) {
+          t.classList.remove('active');
+          t.style.color = '#aaa';
+          t.style.borderBottom = '2px solid transparent';
+        });
+        tab.classList.add('active');
+        tab.style.color = 'var(--color-primary-500)';
+        tab.style.borderBottom = '2px solid var(--color-primary-500)';
+        document.querySelectorAll('.mypage-panel').forEach(function(p) { p.style.display = 'none'; });
+        document.getElementById('tab-' + tab.getAttribute('data-tab')).style.display = 'block';
+      });
+    });
+
+    // Init active tab style
+    document.querySelector('.mypage-tab.active').style.color = 'var(--color-primary-500)';
+    document.querySelector('.mypage-tab.active').style.borderBottom = '2px solid var(--color-primary-500)';
+    document.querySelectorAll('.mypage-tab:not(.active)').forEach(function(t) {
+      t.style.color = '#aaa'; t.style.borderBottom = '2px solid transparent';
+    });
+
+    document.addEventListener('DOMContentLoaded', loadProfile);
+  </script>
+</BaseLayout>
