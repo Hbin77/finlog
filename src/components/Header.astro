@@ -304,6 +304,11 @@ const currentPath = Astro.url.pathname;
     .then(function(res) {
       btn.disabled = false; btn.textContent = '회원가입';
       if (res.ok && res.data.success) {
+        if (res.data.autoLogin) {
+          closeAuthModal();
+          location.reload();
+          return;
+        }
         showMsg('signup-msg', res.data.message, false);
       } else {
         showMsg('signup-msg', res.data.error || '회원가입에 실패했습니다.', true);

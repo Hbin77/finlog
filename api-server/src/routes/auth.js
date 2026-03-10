@@ -12,6 +12,7 @@ const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'change-this-secret';
 const SITE_URL = process.env.SITE_URL || 'https://finlog.site';
 const CF_TURNSTILE_SECRET = process.env.CF_TURNSTILE_SECRET || '';
+const SMTP_CONFIGURED = !!(process.env.SMTP_USER && process.env.SMTP_PASS);
 const COOKIE_OPTIONS = {
   httpOnly: true,
   secure: true,
@@ -91,17 +92,25 @@ router.post('/signup', async (req, res) => {
     const passwordHash = await bcrypt.hash(password, 12);
     const verificationToken = crypto.randomBytes(32).toString('hex');
     const verificationExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24h
+    const autoVerify = !SMTP_CONFIGURED; // SMTP 미설정 시 자동 인증
 
     const result = await query(
       `INSERT INTO users (provider, provider_id, email, password_hash, nickname, email_verified, verification_token, verification_expires)
-       VALUES ('local', $1, $1, $2, $3, FALSE, $4, $5)
+       VALUES ('local', $1, $1, $2, $3, $4, $5, $6)
        RETURNING id, nickname, avatar_url`,
-      [email, passwordHash, nickname, verificationToken, verificationExpires]
+      [email, passwordHash, nickname, autoVerify, autoVerify ? null : verificationToken, autoVerify ? null : verificationExpires]
     );
 
-    // Send verification email
-    await sendVerificationEmail(email, nickname, verificationToken);
+    if (autoVerify) {
+      // SMTP 미설정: 바로 로그인 처리
+      const user = result.rows[0];
+      const token = createToken(user);
+      res.cookie('token', token, COOKIE_OPTIONS);
+      return res.json({ success: true, autoLogin: true, message: '가입이 완료되었습니다!' });
+    }
 
+    // SMTP 설정됨: 인증 이메일 발송
+    await sendVerificationEmail(email, nickname, verificationToken);
     res.json({ success: true, message: '가입 완료! 이메일을 확인하여 인증을 완료해주세요.' });
   } catch (err) {
     console.error('Signup error:', err.message);
@@ -195,7 +204,7 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: '이메일 또는 비밀번호가 올바르지 않습니다.' });
     }
 
-    if (!user.email_verified) {
+    if (!user.email_verified && SMTP_CONFIGURED) {
       return res.status(403).json({ error: '이메일 인증이 필요합니다. 이메일을 확인해주세요.', needVerify: true });
     }
 
