@@ -45,15 +45,48 @@ async function verifyTurnstile(token, ip) {
 }
 
 async function upsertUser(provider, providerId, email, nickname, avatarUrl) {
+  // Check if this provider+id already exists
+  const existing = await query(
+    'SELECT id, nickname, avatar_url FROM users WHERE provider = $1 AND provider_id = $2',
+    [provider, providerId]
+  );
+  if (existing.rows.length > 0) {
+    // Update existing social account
+    await query(
+      'UPDATE users SET email = COALESCE($1, email), nickname = COALESCE($2, nickname), avatar_url = COALESCE($3, avatar_url) WHERE provider = $4 AND provider_id = $5',
+      [email, nickname, avatarUrl, provider, providerId]
+    );
+    return existing.rows[0];
+  }
+
+  // Check if same email exists with different provider → link to existing account
+  if (email) {
+    const sameEmail = await query(
+      'SELECT id, nickname, avatar_url FROM users WHERE email = $1 LIMIT 1',
+      [email]
+    );
+    if (sameEmail.rows.length > 0) {
+      // Update existing account with this provider info (for future lookups, store in a note)
+      // Also insert a new provider link row so future logins work
+      try {
+        await query(
+          `INSERT INTO users (provider, provider_id, email, nickname, avatar_url, email_verified)
+           VALUES ($1, $2, $3, $4, $5, TRUE)
+           ON CONFLICT (provider, provider_id) DO NOTHING`,
+          [provider, providerId, email, nickname, avatarUrl]
+        );
+      } catch (e) { /* ignore */ }
+      // Return the original account
+      return sameEmail.rows[0];
+    }
+  }
+
+  // New user
   const result = await query(
     `INSERT INTO users (provider, provider_id, email, nickname, avatar_url, email_verified)
-     VALUES ($1, $2, $3, $4, $5, $6)
-     ON CONFLICT (provider, provider_id)
-     DO UPDATE SET email = COALESCE($3, users.email),
-                   nickname = COALESCE($4, users.nickname),
-                   avatar_url = COALESCE($5, users.avatar_url)
+     VALUES ($1, $2, $3, $4, $5, TRUE)
      RETURNING id, nickname, avatar_url`,
-    [provider, providerId, email, nickname, avatarUrl, provider !== 'local']
+    [provider, providerId, email, nickname, avatarUrl]
   );
   return result.rows[0];
 }

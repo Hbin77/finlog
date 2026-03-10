@@ -54,6 +54,11 @@ const readingTime = Math.max(1, Math.ceil(post.body!.length / 500));
       </p>
 
       <div class="flex items-center gap-2 text-xs text-[var(--color-neutral-400)]">
+        <span class="inline-flex items-center gap-1">
+          <span style="width:16px;height:16px;border-radius:50%;background:var(--color-primary-100);color:var(--color-primary-600);display:inline-flex;align-items:center;justify-content:center;font-size:0.5rem;font-weight:700;">H</span>
+          <span style="font-weight:500;color:var(--color-neutral-500);">Hbin77</span>
+        </span>
+        <span aria-hidden="true">&middot;</span>
         <time datetime={pubDate.toISOString()}>{formattedDate}</time>
         <span aria-hidden="true">&middot;</span>
         <span>{readingTime}분 읽기</span>

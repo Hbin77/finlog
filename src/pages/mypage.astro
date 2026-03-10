@@ -51,6 +51,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div style="display:flex;gap:0;margin-bottom:1.5rem;border-bottom:2px solid #f0f0f0;">
         <button class="mypage-tab active" data-tab="posts" style="flex:1;padding:0.7rem 0;font-size:0.9rem;font-weight:600;border:none;background:none;cursor:pointer;">내 게시글</button>
         <button class="mypage-tab" data-tab="comments" style="flex:1;padding:0.7rem 0;font-size:0.9rem;font-weight:600;border:none;background:none;cursor:pointer;">내 댓글</button>
+        <button class="mypage-tab" data-tab="suggestions" id="suggestions-tab" style="display:none;flex:1;padding:0.7rem 0;font-size:0.9rem;font-weight:600;border:none;background:none;cursor:pointer;">수정 제안</button>
         <button class="mypage-tab" data-tab="settings" style="flex:1;padding:0.7rem 0;font-size:0.9rem;font-weight:600;border:none;background:none;cursor:pointer;">설정</button>
       </div>
 
@@ -62,6 +63,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <!-- My Comments -->
       <div id="tab-comments" class="mypage-panel" style="display:none;">
         <div id="my-comments-list"></div>
+      </div>
+
+      <!-- Suggestions (admin only) -->
+      <div id="tab-suggestions" class="mypage-panel" style="display:none;">
+        <div id="suggestions-list"></div>
       </div>
 
       <!-- Settings -->
@@ -151,6 +157,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
           if (_myUser.provider === 'local') {
             document.getElementById('password-section').style.display = 'block';
+          }
+
+          // Show suggestions tab for admin
+          if (_myUser.id === 1) {
+            document.getElementById('suggestions-tab').style.display = 'flex';
+            loadSuggestions();
           }
 
           loadMyPosts();
@@ -262,6 +274,64 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         .then(function(d) {
           if (d.success) { alert('계정이 삭제되었습니다.'); location.href = '/'; }
           else alert('계정 삭제에 실패했습니다.');
+        });
+    }
+
+    function loadSuggestions() {
+      fetch('/api/suggestions', { credentials: 'include' })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          var el = document.getElementById('suggestions-list');
+          var items = data.suggestions || [];
+          if (!items.length) {
+            el.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--color-neutral-400);font-size:0.9rem;">대기 중인 수정 제안이 없습니다.</div>';
+            return;
+          }
+          var html = '';
+          items.forEach(function(s) {
+            html += '<div id="sug-' + s.id + '" style="background:white;border:1px solid var(--color-border);border-radius:12px;padding:1.25rem;margin-bottom:0.75rem;">' +
+              '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">' +
+                '<span style="font-size:0.78rem;font-weight:600;color:var(--color-primary-600);">' + escapeHtml(s.post_slug) + '</span>' +
+                '<span style="font-size:0.72rem;color:var(--color-neutral-400);">' + formatDate(s.created_at) + ' · ' + escapeHtml(s.nickname || '익명') + '</span>' +
+              '</div>' +
+              '<div style="margin-bottom:0.5rem;">' +
+                '<div style="font-size:0.75rem;font-weight:600;color:#dc2626;margin-bottom:0.2rem;">기존 내용</div>' +
+                '<div style="font-size:0.85rem;color:var(--color-neutral-700);background:#fef2f2;padding:0.5rem 0.75rem;border-radius:8px;white-space:pre-wrap;">' + escapeHtml(s.original_text) + '</div>' +
+              '</div>' +
+              '<div style="margin-bottom:0.5rem;">' +
+                '<div style="font-size:0.75rem;font-weight:600;color:#16a34a;margin-bottom:0.2rem;">제안 내용</div>' +
+                '<div style="font-size:0.85rem;color:var(--color-neutral-700);background:#f0fdf4;padding:0.5rem 0.75rem;border-radius:8px;white-space:pre-wrap;">' + escapeHtml(s.suggested_text) + '</div>' +
+              '</div>' +
+              (s.reason ? '<div style="font-size:0.8rem;color:var(--color-neutral-500);margin-bottom:0.75rem;">사유: ' + escapeHtml(s.reason) + '</div>' : '') +
+              '<div style="display:flex;gap:0.5rem;justify-content:flex-end;">' +
+                '<button onclick="rejectSuggestion(' + s.id + ')" style="padding:0.4rem 0.9rem;border:1px solid #fca5a5;background:#fef2f2;color:#dc2626;border-radius:8px;font-size:0.8rem;font-weight:600;cursor:pointer;">거절</button>' +
+                '<button onclick="approveSuggestion(' + s.id + ')" style="padding:0.4rem 0.9rem;border:none;background:#16a34a;color:white;border-radius:8px;font-size:0.8rem;font-weight:600;cursor:pointer;">승인</button>' +
+              '</div>' +
+            '</div>';
+          });
+          el.innerHTML = html;
+        });
+    }
+
+    function approveSuggestion(id) {
+      fetch('/api/suggestions/' + id + '/approve', { method: 'PUT', credentials: 'include' })
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          if (d.suggestion) {
+            var el = document.getElementById('sug-' + id);
+            if (el) el.style.display = 'none';
+          }
+        });
+    }
+
+    function rejectSuggestion(id) {
+      fetch('/api/suggestions/' + id + '/reject', { method: 'PUT', credentials: 'include' })
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          if (d.suggestion) {
+            var el = document.getElementById('sug-' + id);
+            if (el) el.style.display = 'none';
+          }
         });
     }
 
