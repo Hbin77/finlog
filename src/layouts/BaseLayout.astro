@@ -76,5 +76,43 @@ const {
       <slot />
     </main>
     <Footer />
+
+    <!-- Cookie Consent Banner -->
+    <div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9990;background:white;border-top:1px solid #e5e7eb;box-shadow:0 -4px 20px rgba(0,0,0,0.1);padding:1rem 1.5rem;animation:cookieSlideUp 0.3s ease-out;">
+      <div style="max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+        <p style="font-size:0.85rem;color:#555;line-height:1.5;flex:1;min-width:200px;">
+          이 웹사이트는 사용자 경험 개선과 맞춤 광고 제공을 위해 쿠키를 사용합니다.
+          자세한 내용은 <a href="/privacy-policy/" style="color:var(--color-primary-500);text-decoration:underline;">개인정보처리방침</a>을 참고하세요.
+        </p>
+        <div style="display:flex;gap:0.5rem;flex-shrink:0;">
+          <button onclick="acceptCookies()" style="padding:0.5rem 1.25rem;background:var(--color-primary-500);color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:600;cursor:pointer;">동의</button>
+          <button onclick="declineCookies()" style="padding:0.5rem 1rem;background:white;color:#666;border:1px solid #ddd;border-radius:8px;font-size:0.82rem;cursor:pointer;">거부</button>
+        </div>
+      </div>
+    </div>
+
+    <script is:inline>
+      (function() {
+        if (!localStorage.getItem('cookie_consent')) {
+          var banner = document.getElementById('cookie-banner');
+          if (banner) banner.style.display = 'block';
+        }
+      })();
+      function acceptCookies() {
+        localStorage.setItem('cookie_consent', 'accepted');
+        document.getElementById('cookie-banner').style.display = 'none';
+      }
+      function declineCookies() {
+        localStorage.setItem('cookie_consent', 'declined');
+        document.getElementById('cookie-banner').style.display = 'none';
+      }
+    </script>
+
+    <style is:inline>
+      @keyframes cookieSlideUp {
+        from { opacity: 0; transform: translateY(100%); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+    </style>
   </body>
 </html>
