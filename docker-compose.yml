@@ -1,6 +1,9 @@
 services:
   finlog:
-    build: .
+    build:
+      context: .
+      args:
+        PUBLIC_CF_TURNSTILE_SITE_KEY: ${PUBLIC_CF_TURNSTILE_SITE_KEY:-}
     container_name: finlog
     ports:
       - "8086:8086"
@@ -28,6 +31,11 @@ services:
       - KAKAO_CLIENT_ID=${KAKAO_CLIENT_ID}
       - KAKAO_CLIENT_SECRET=${KAKAO_CLIENT_SECRET}
       - SITE_URL=${SITE_URL:-https://finlog.site}
+      - CF_TURNSTILE_SECRET=${CF_TURNSTILE_SECRET:-}
+      - SMTP_HOST=${SMTP_HOST:-smtp.gmail.com}
+      - SMTP_PORT=${SMTP_PORT:-587}
+      - SMTP_USER=${SMTP_USER:-}
+      - SMTP_PASS=${SMTP_PASS:-}
     depends_on:
       - postgres
 

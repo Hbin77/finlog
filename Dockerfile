@@ -3,6 +3,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
+ARG PUBLIC_CF_TURNSTILE_SITE_KEY=""
+ENV PUBLIC_CF_TURNSTILE_SITE_KEY=$PUBLIC_CF_TURNSTILE_SITE_KEY
 RUN npm run build
 
 FROM nginx:alpine
