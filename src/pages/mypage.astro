@@ -51,7 +51,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div style="display:flex;gap:0;margin-bottom:1.5rem;border-bottom:2px solid #f0f0f0;">
         <button class="mypage-tab active" data-tab="posts" style="flex:1;padding:0.7rem 0;font-size:0.9rem;font-weight:600;border:none;background:none;cursor:pointer;">내 게시글</button>
         <button class="mypage-tab" data-tab="comments" style="flex:1;padding:0.7rem 0;font-size:0.9rem;font-weight:600;border:none;background:none;cursor:pointer;">내 댓글</button>
-        <button class="mypage-tab" data-tab="suggestions" id="suggestions-tab" style="display:none;flex:1;padding:0.7rem 0;font-size:0.9rem;font-weight:600;border:none;background:none;cursor:pointer;">수정 제안</button>
+        <button class="mypage-tab" data-tab="suggestions" id="suggestions-tab" style="flex:1;padding:0.7rem 0;font-size:0.9rem;font-weight:600;border:none;background:none;cursor:pointer;">수정 제안</button>
         <button class="mypage-tab" data-tab="settings" style="flex:1;padding:0.7rem 0;font-size:0.9rem;font-weight:600;border:none;background:none;cursor:pointer;">설정</button>
       </div>
 
@@ -159,12 +159,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             document.getElementById('password-section').style.display = 'block';
           }
 
-          // Show suggestions tab for admin
-          if (_myUser.id === 1) {
-            document.getElementById('suggestions-tab').style.display = 'flex';
-            loadSuggestions();
-          }
-
+          loadSuggestions();
           loadMyPosts();
           loadMyComments();
         })

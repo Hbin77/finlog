@@ -31,15 +31,23 @@ router.post('/', requireAuth, async (req, res) => {
   }
 });
 
-// Get all pending suggestions (admin review)
+// Get pending suggestions for current user's posts
 router.get('/', requireAuth, async (req, res) => {
   try {
+    // For blog posts (post_slug, no post_id): belong to user id=1
+    // For community posts (post_id): belong to post author
     const result = await query(
       `SELECT s.*, u.nickname AS suggester_nickname
        FROM suggestions s
        JOIN users u ON s.user_id = u.id
+       LEFT JOIN posts p ON s.post_id = p.id
        WHERE s.status = 'pending'
-       ORDER BY s.created_at DESC`
+         AND (
+           (s.post_id IS NULL AND $1 = 1)
+           OR (s.post_id IS NOT NULL AND p.user_id = $1)
+         )
+       ORDER BY s.created_at DESC`,
+      [req.user.id]
     );
     res.json({ suggestions: result.rows });
   } catch (err) {
@@ -63,23 +71,23 @@ router.get('/post/:slug', optionalAuth, async (req, res) => {
   }
 });
 
-// Approve suggestion (admin only)
+// Approve suggestion (post owner)
 router.put('/:id/approve', requireAuth, async (req, res) => {
   try {
-    if (req.user.id !== 1) {
+    const { id } = req.params;
+    const existing = await query('SELECT * FROM suggestions WHERE id = $1', [id]);
+    if (existing.rows.length === 0) return res.status(404).json({ error: '수정 제안을 찾을 수 없습니다.' });
+
+    const s = existing.rows[0];
+    // Check ownership: blog post → user 1, community post → post author
+    if (s.post_id) {
+      const post = await query('SELECT user_id FROM posts WHERE id = $1', [s.post_id]);
+      if (!post.rows.length || post.rows[0].user_id !== req.user.id) return res.status(403).json({ error: '권한이 없습니다.' });
+    } else if (req.user.id !== 1) {
       return res.status(403).json({ error: '권한이 없습니다.' });
     }
 
-    const { id } = req.params;
-    const result = await query(
-      `UPDATE suggestions SET status = 'approved' WHERE id = $1 RETURNING *`,
-      [id]
-    );
-
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: '수정 제안을 찾을 수 없습니다.' });
-    }
-
+    const result = await query(`UPDATE suggestions SET status = 'approved' WHERE id = $1 RETURNING *`, [id]);
     res.json({ suggestion: result.rows[0] });
   } catch (err) {
     console.error('Approve suggestion error:', err.message);
@@ -87,23 +95,22 @@ router.put('/:id/approve', requireAuth, async (req, res) => {
   }
 });
 
-// Reject suggestion (admin only)
+// Reject suggestion (post owner)
 router.put('/:id/reject', requireAuth, async (req, res) => {
   try {
-    if (req.user.id !== 1) {
+    const { id } = req.params;
+    const existing = await query('SELECT * FROM suggestions WHERE id = $1', [id]);
+    if (existing.rows.length === 0) return res.status(404).json({ error: '수정 제안을 찾을 수 없습니다.' });
+
+    const s = existing.rows[0];
+    if (s.post_id) {
+      const post = await query('SELECT user_id FROM posts WHERE id = $1', [s.post_id]);
+      if (!post.rows.length || post.rows[0].user_id !== req.user.id) return res.status(403).json({ error: '권한이 없습니다.' });
+    } else if (req.user.id !== 1) {
       return res.status(403).json({ error: '권한이 없습니다.' });
     }
 
-    const { id } = req.params;
-    const result = await query(
-      `UPDATE suggestions SET status = 'rejected' WHERE id = $1 RETURNING *`,
-      [id]
-    );
-
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: '수정 제안을 찾을 수 없습니다.' });
-    }
-
+    const result = await query(`UPDATE suggestions SET status = 'rejected' WHERE id = $1 RETURNING *`, [id]);
     res.json({ suggestion: result.rows[0] });
   } catch (err) {
     console.error('Reject suggestion error:', err.message);
