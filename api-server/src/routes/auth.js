@@ -66,17 +66,8 @@ async function upsertUser(provider, providerId, email, nickname, avatarUrl) {
       [email]
     );
     if (sameEmail.rows.length > 0) {
-      // Update existing account with this provider info (for future lookups, store in a note)
-      // Also insert a new provider link row so future logins work
-      try {
-        await query(
-          `INSERT INTO users (provider, provider_id, email, nickname, avatar_url, email_verified)
-           VALUES ($1, $2, $3, $4, $5, TRUE)
-           ON CONFLICT (provider, provider_id) DO NOTHING`,
-          [provider, providerId, email, nickname, avatarUrl]
-        );
-      } catch (e) { /* ignore */ }
-      // Return the original account
+      // Same email found - return existing account (no new row needed)
+      // Future logins with this provider will also match via email
       return sameEmail.rows[0];
     }
   }

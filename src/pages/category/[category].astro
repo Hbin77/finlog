@@ -7,7 +7,7 @@ import { getCollection } from 'astro:content';
 import type { GetStaticPaths } from 'astro';
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const categories = ['saving', 'investing', 'tax', 'tools', 'tips'];
+  const categories = ['saving', 'investing', 'tax', 'tools', 'tips', 'general'];
   return categories.map((category) => ({
     params: { category },
   }));
@@ -33,6 +33,10 @@ const categoryMeta: Record<string, { label: string; description: string }> = {
   tips: {
     label: '생활비 절약 팁',
     description: '식비, 통신비, 보험료, 구독 서비스 정리 등 일상에서 실천할 수 있는 절약 방법을 공유합니다.',
+  },
+  general: {
+    label: '자유 게시판',
+    description: '재테크 관련 자유로운 이야기를 나누는 공간입니다.',
   },
 };
 

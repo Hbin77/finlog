@@ -287,7 +287,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             html += '<div id="sug-' + s.id + '" style="background:white;border:1px solid var(--color-border);border-radius:12px;padding:1.25rem;margin-bottom:0.75rem;">' +
               '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">' +
                 '<span style="font-size:0.78rem;font-weight:600;color:var(--color-primary-600);">' + escapeHtml(s.post_slug) + '</span>' +
-                '<span style="font-size:0.72rem;color:var(--color-neutral-400);">' + formatDate(s.created_at) + ' · ' + escapeHtml(s.nickname || '익명') + '</span>' +
+                '<span style="font-size:0.72rem;color:var(--color-neutral-400);">' + formatDate(s.created_at) + ' · ' + escapeHtml(s.suggester_nickname || '익명') + '</span>' +
               '</div>' +
               '<div style="margin-bottom:0.5rem;">' +
                 '<div style="font-size:0.75rem;font-weight:600;color:#dc2626;margin-bottom:0.2rem;">기존 내용</div>' +
