@@ -23,8 +23,6 @@ const currentPath = Astro.url.pathname;
 
       <!-- Desktop Navigation -->
       <nav class="hidden md:flex items-center gap-6 lg:gap-8" aria-label="메인 네비게이션">
-        <span id="header-user-indicator" style="display:none;font-size:0.78rem;color:var(--color-neutral-500);background:var(--color-primary-50);padding:0.25rem 0.6rem;border-radius:999px;font-weight:500;"></span>
-        <a id="header-login-btn" href="/community/" style="display:none;font-size:0.78rem;color:white;background:var(--color-primary-500);padding:0.3rem 0.75rem;border-radius:999px;font-weight:600;text-decoration:none;">로그인</a>
         {navLinks.map((link) => (
           <a
             href={link.href}
@@ -38,14 +36,22 @@ const currentPath = Astro.url.pathname;
             {link.label}
           </a>
         ))}
+
+        <!-- Auth buttons (after 소개) -->
+        <div id="header-auth" style="display:flex;align-items:center;gap:0.5rem;margin-left:0.5rem;">
+          <!-- filled by JS -->
+        </div>
       </nav>
 
-      <!-- Mobile Menu Toggle -->
-      <label for="mobile-menu-toggle" class="md:hidden cursor-pointer p-2 -mr-2 text-[var(--color-neutral-600)] hover:text-[var(--color-primary-500)]" aria-label="메뉴 열기">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </label>
+      <!-- Mobile: auth + hamburger -->
+      <div class="flex md:hidden items-center gap-2">
+        <div id="header-auth-mobile" style="display:flex;align-items:center;gap:0.4rem;"></div>
+        <label for="mobile-menu-toggle" class="cursor-pointer p-2 -mr-2 text-[var(--color-neutral-600)] hover:text-[var(--color-primary-500)]" aria-label="메뉴 열기">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </label>
+      </div>
     </div>
   </div>
 
@@ -68,26 +74,118 @@ const currentPath = Astro.url.pathname;
       ))}
     </nav>
   </div>
+
+  <!-- Login/Signup Modal -->
+  <div id="auth-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.45);backdrop-filter:blur(4px);">
+    <div style="max-width:400px;margin:10vh auto;background:white;border-radius:16px;padding:2.5rem 2rem;position:relative;animation:authSlideUp 0.25s ease-out;">
+      <button onclick="closeAuthModal()" style="position:absolute;top:1rem;right:1.25rem;background:none;border:none;font-size:1.4rem;cursor:pointer;color:#999;line-height:1;">&times;</button>
+
+      <!-- Tab: Login / Signup -->
+      <div id="auth-tab-bar" style="display:flex;gap:0;margin-bottom:1.5rem;border-bottom:2px solid #f0f0f0;">
+        <button id="tab-login" onclick="switchAuthTab('login')" style="flex:1;padding:0.6rem 0;font-size:0.95rem;font-weight:700;border:none;background:none;cursor:pointer;color:var(--color-primary-500);border-bottom:2px solid var(--color-primary-500);margin-bottom:-2px;">로그인</button>
+        <button id="tab-signup" onclick="switchAuthTab('signup')" style="flex:1;padding:0.6rem 0;font-size:0.95rem;font-weight:700;border:none;background:none;cursor:pointer;color:#aaa;border-bottom:2px solid transparent;margin-bottom:-2px;">회원가입</button>
+      </div>
+
+      <!-- Login Panel -->
+      <div id="panel-login">
+        <p style="text-align:center;font-size:0.9rem;color:#666;margin-bottom:1.5rem;">간편하게 로그인하고 커뮤니티에 참여하세요</p>
+        <a href="/api/auth/google" style="display:flex;align-items:center;justify-content:center;gap:0.6rem;padding:0.7rem 1rem;border:1px solid #ddd;border-radius:10px;background:white;font-size:0.9rem;color:#333;text-decoration:none;font-weight:500;margin-bottom:0.75rem;transition:background 0.2s;" onmouseover="this.style.background='#f9f9f9'" onmouseout="this.style.background='white'">
+          <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Google로 로그인
+        </a>
+        <a href="/api/auth/kakao" style="display:flex;align-items:center;justify-content:center;gap:0.6rem;padding:0.7rem 1rem;border-radius:10px;background:#FEE500;font-size:0.9rem;color:#3C1E1E;text-decoration:none;font-weight:600;transition:background 0.2s;" onmouseover="this.style.background='#fdd835'" onmouseout="this.style.background='#FEE500'">
+          <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#3C1E1E" d="M12 3C6.48 3 2 6.36 2 10.44c0 2.62 1.75 4.93 4.38 6.24l-1.12 4.16c-.08.3.26.54.52.37l4.97-3.28c.41.04.82.07 1.25.07 5.52 0 10-3.36 10-7.56S17.52 3 12 3z"/></svg>
+          카카오로 로그인
+        </a>
+      </div>
+
+      <!-- Signup Panel -->
+      <div id="panel-signup" style="display:none;">
+        <p style="text-align:center;font-size:0.9rem;color:#666;margin-bottom:1.5rem;">소셜 계정으로 간편하게 가입하세요</p>
+        <a href="/api/auth/google" style="display:flex;align-items:center;justify-content:center;gap:0.6rem;padding:0.7rem 1rem;border:1px solid #ddd;border-radius:10px;background:white;font-size:0.9rem;color:#333;text-decoration:none;font-weight:500;margin-bottom:0.75rem;transition:background 0.2s;" onmouseover="this.style.background='#f9f9f9'" onmouseout="this.style.background='white'">
+          <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Google로 가입하기
+        </a>
+        <a href="/api/auth/kakao" style="display:flex;align-items:center;justify-content:center;gap:0.6rem;padding:0.7rem 1rem;border-radius:10px;background:#FEE500;font-size:0.9rem;color:#3C1E1E;text-decoration:none;font-weight:600;transition:background 0.2s;" onmouseover="this.style.background='#fdd835'" onmouseout="this.style.background='#FEE500'">
+          <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#3C1E1E" d="M12 3C6.48 3 2 6.36 2 10.44c0 2.62 1.75 4.93 4.38 6.24l-1.12 4.16c-.08.3.26.54.52.37l4.97-3.28c.41.04.82.07 1.25.07 5.52 0 10-3.36 10-7.56S17.52 3 12 3z"/></svg>
+          카카오로 가입하기
+        </a>
+        <p style="text-align:center;font-size:0.75rem;color:#aaa;margin-top:1rem;line-height:1.5;">가입 시 <a href="/privacy/" style="color:var(--color-primary-500);text-decoration:underline;">개인정보처리방침</a>에 동의합니다.</p>
+      </div>
+    </div>
+  </div>
+</header>
+
 <script is:inline>
+  function openAuthModal(tab) {
+    document.getElementById('auth-modal').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    switchAuthTab(tab || 'login');
+  }
+  function closeAuthModal() {
+    document.getElementById('auth-modal').style.display = 'none';
+    document.body.style.overflow = '';
+  }
+  function switchAuthTab(tab) {
+    var tl = document.getElementById('tab-login');
+    var ts = document.getElementById('tab-signup');
+    var pl = document.getElementById('panel-login');
+    var ps = document.getElementById('panel-signup');
+    if (tab === 'login') {
+      tl.style.color = 'var(--color-primary-500)';
+      tl.style.borderBottomColor = 'var(--color-primary-500)';
+      ts.style.color = '#aaa';
+      ts.style.borderBottomColor = 'transparent';
+      pl.style.display = 'block';
+      ps.style.display = 'none';
+    } else {
+      ts.style.color = 'var(--color-primary-500)';
+      ts.style.borderBottomColor = 'var(--color-primary-500)';
+      tl.style.color = '#aaa';
+      tl.style.borderBottomColor = 'transparent';
+      ps.style.display = 'block';
+      pl.style.display = 'none';
+    }
+  }
+  // Close on background click
+  document.getElementById('auth-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeAuthModal();
+  });
+
+  // Auth state check
   (function() {
     fetch('/api/auth/me', { credentials: 'include' })
       .then(function(r) { return r.ok ? r.json() : null; })
       .then(function(data) {
-        var userEl = document.getElementById('header-user-indicator');
-        var loginEl = document.getElementById('header-login-btn');
+        var desktop = document.getElementById('header-auth');
+        var mobile = document.getElementById('header-auth-mobile');
         if (data && data.user) {
-          if (userEl) {
-            userEl.textContent = (data.user.nickname || data.user.name || '사용자') + '님';
-            userEl.style.display = 'inline-block';
-          }
+          var name = (data.user.nickname || data.user.name || '사용자');
+          var loggedIn = '<span style="font-size:0.8rem;color:var(--color-neutral-600);background:var(--color-primary-50);padding:0.25rem 0.65rem;border-radius:999px;font-weight:500;">' + name + '님</span>' +
+            '<button onclick="fetch(\'/api/auth/logout\',{method:\'POST\',credentials:\'include\'}).then(function(){location.reload()})" style="font-size:0.75rem;padding:0.25rem 0.6rem;border:1px solid var(--color-border);border-radius:8px;background:white;cursor:pointer;color:var(--color-neutral-500);">로그아웃</button>';
+          if (desktop) desktop.innerHTML = loggedIn;
+          if (mobile) mobile.innerHTML = '<span style="font-size:0.72rem;color:var(--color-neutral-500);background:var(--color-primary-50);padding:0.2rem 0.5rem;border-radius:999px;">' + name + '</span>';
         } else {
-          if (loginEl) loginEl.style.display = 'inline-block';
+          var buttons = '<button onclick="openAuthModal(\'login\')" style="font-size:0.8rem;padding:0.3rem 0.85rem;border:1px solid var(--color-primary-500);border-radius:8px;background:white;color:var(--color-primary-500);cursor:pointer;font-weight:600;">로그인</button>' +
+            '<button onclick="openAuthModal(\'signup\')" style="font-size:0.8rem;padding:0.3rem 0.85rem;border:none;border-radius:8px;background:var(--color-primary-500);color:white;cursor:pointer;font-weight:600;">회원가입</button>';
+          if (desktop) desktop.innerHTML = buttons;
+          if (mobile) mobile.innerHTML = '<button onclick="openAuthModal(\'login\')" style="font-size:0.72rem;padding:0.25rem 0.6rem;border:none;border-radius:6px;background:var(--color-primary-500);color:white;cursor:pointer;font-weight:600;">로그인</button>';
         }
       })
       .catch(function() {
-        var loginEl = document.getElementById('header-login-btn');
-        if (loginEl) loginEl.style.display = 'inline-block';
+        var desktop = document.getElementById('header-auth');
+        var mobile = document.getElementById('header-auth-mobile');
+        var buttons = '<button onclick="openAuthModal(\'login\')" style="font-size:0.8rem;padding:0.3rem 0.85rem;border:1px solid var(--color-primary-500);border-radius:8px;background:white;color:var(--color-primary-500);cursor:pointer;font-weight:600;">로그인</button>' +
+          '<button onclick="openAuthModal(\'signup\')" style="font-size:0.8rem;padding:0.3rem 0.85rem;border:none;border-radius:8px;background:var(--color-primary-500);color:white;cursor:pointer;font-weight:600;">회원가입</button>';
+        if (desktop) desktop.innerHTML = buttons;
+        if (mobile) mobile.innerHTML = '<button onclick="openAuthModal(\'login\')" style="font-size:0.72rem;padding:0.25rem 0.6rem;border:none;border-radius:6px;background:var(--color-primary-500);color:white;cursor:pointer;font-weight:600;">로그인</button>';
       });
   })();
 </script>
-</header>
+
+<style is:inline>
+  @keyframes authSlideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
