@@ -24,6 +24,7 @@ const currentPath = Astro.url.pathname;
       <!-- Desktop Navigation -->
       <nav class="hidden md:flex items-center gap-6 lg:gap-8" aria-label="메인 네비게이션">
         <span id="header-user-indicator" style="display:none;font-size:0.78rem;color:var(--color-neutral-500);background:var(--color-primary-50);padding:0.25rem 0.6rem;border-radius:999px;font-weight:500;"></span>
+        <a id="header-login-btn" href="/community/" style="display:none;font-size:0.78rem;color:white;background:var(--color-primary-500);padding:0.3rem 0.75rem;border-radius:999px;font-weight:600;text-decoration:none;">로그인</a>
         {navLinks.map((link) => (
           <a
             href={link.href}
@@ -72,15 +73,21 @@ const currentPath = Astro.url.pathname;
     fetch('/api/auth/me', { credentials: 'include' })
       .then(function(r) { return r.ok ? r.json() : null; })
       .then(function(data) {
+        var userEl = document.getElementById('header-user-indicator');
+        var loginEl = document.getElementById('header-login-btn');
         if (data && data.user) {
-          var el = document.getElementById('header-user-indicator');
-          if (el) {
-            el.textContent = (data.user.nickname || data.user.name || '사용자') + '님';
-            el.style.display = 'inline-block';
+          if (userEl) {
+            userEl.textContent = (data.user.nickname || data.user.name || '사용자') + '님';
+            userEl.style.display = 'inline-block';
           }
+        } else {
+          if (loginEl) loginEl.style.display = 'inline-block';
         }
       })
-      .catch(function() {});
+      .catch(function() {
+        var loginEl = document.getElementById('header-login-btn');
+        if (loginEl) loginEl.style.display = 'inline-block';
+      });
   })();
 </script>
 </header>
