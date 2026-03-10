@@ -4,7 +4,7 @@ const { requireAuth, optionalAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
-const VALID_CATEGORIES = ['saving', 'investing', 'tax', 'frugal', 'tools', 'general'];
+const VALID_CATEGORIES = ['saving', 'investing', 'tax', 'tools', 'tips', 'general'];
 
 // List posts
 router.get('/', optionalAuth, async (req, res) => {
@@ -17,7 +17,7 @@ router.get('/', optionalAuth, async (req, res) => {
     let where = '';
     const params = [];
 
-    if (category && VALID_CATEGORIES.includes(category)) {
+    if (category) {
       where = 'WHERE p.category = $1';
       params.push(category);
     }
@@ -29,7 +29,7 @@ router.get('/', optionalAuth, async (req, res) => {
     const total = parseInt(countResult.rows[0].count);
 
     const postsResult = await query(
-      `SELECT p.id, p.category, p.title, p.likes, p.created_at, p.updated_at,
+      `SELECT p.id, p.category, p.title, p.body, p.likes, p.created_at, p.updated_at,
               u.id AS author_id, u.nickname AS author_nickname, u.avatar_url AS author_avatar,
               (SELECT COUNT(*) FROM comments c WHERE c.post_id = p.id) AS comment_count
        FROM posts p

@@ -56,27 +56,247 @@ const breadcrumbItems = [
     <Breadcrumb items={breadcrumbItems} />
 
     <!-- Category header -->
-    <div class="mb-8">
-      <div class="mb-3">
-        <CategoryTag category={category as any} size="md" />
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;">
+      <div>
+        <div class="mb-3">
+          <CategoryTag category={category as any} size="md" />
+        </div>
+        <h1 class="text-2xl md:text-[var(--font-size-h1)] font-bold text-[var(--color-text)] mb-2">
+          {meta.label}
+        </h1>
+        <p class="text-[var(--color-text-sub)]">{meta.description}</p>
       </div>
-      <h1 class="text-2xl md:text-[var(--font-size-h1)] font-bold text-[var(--color-text)] mb-2">
-        {meta.label}
-      </h1>
-      <p class="text-[var(--color-text-sub)]">{meta.description}</p>
+      <!-- Write button (JS fills) -->
+      <div id="write-btn-area"></div>
     </div>
 
-    <!-- Posts grid -->
-    {sortedPosts.length > 0 ? (
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {sortedPosts.map((post) => (
-          <BlogCard post={post} />
-        ))}
+    <!-- Editor posts (static blog) -->
+    <div style="margin-bottom:2.5rem;">
+      <h2 style="font-size:1.1rem;font-weight:700;color:var(--color-neutral-700);margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem;">
+        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        에디터 추천
+      </h2>
+      {sortedPosts.length > 0 ? (
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {sortedPosts.map((post) => (
+            <BlogCard post={post} />
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-8">
+          <p class="text-[var(--color-neutral-500)]" style="font-size:0.9rem;">에디터 추천 글이 아직 없습니다.</p>
+        </div>
+      )}
+    </div>
+
+    <!-- Divider -->
+    <div style="border-top:1px solid var(--color-border);margin-bottom:2.5rem;"></div>
+
+    <!-- User posts section -->
+    <div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
+        <h2 style="font-size:1.1rem;font-weight:700;color:var(--color-neutral-700);display:flex;align-items:center;gap:0.5rem;">
+          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          사용자 글
+        </h2>
       </div>
-    ) : (
-      <div class="text-center py-16">
-        <p class="text-[var(--color-neutral-500)]">이 카테고리에 아직 작성된 글이 없습니다.</p>
+
+      <!-- Write form (hidden by default) -->
+      <div id="write-form" style="display:none;background:white;border:1px solid var(--color-border);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem;">
+        <input id="write-title" type="text" placeholder="제목을 입력하세요" maxlength="200" style="width:100%;padding:0.6rem 0.75rem;border:1px solid var(--color-border);border-radius:8px;font-size:0.95rem;margin-bottom:0.75rem;box-sizing:border-box;font-weight:600;" />
+        <textarea id="write-body" placeholder="내용을 작성해주세요... 재테크 꿀팁, 경험, 질문 등 자유롭게 공유하세요." rows="6" style="width:100%;padding:0.75rem;border:1px solid var(--color-border);border-radius:8px;font-size:0.9rem;resize:vertical;margin-bottom:1rem;box-sizing:border-box;line-height:1.6;"></textarea>
+        <div style="display:flex;justify-content:flex-end;gap:0.5rem;">
+          <button onclick="toggleWriteForm()" style="padding:0.5rem 1rem;border:1px solid var(--color-border);border-radius:8px;background:white;font-size:0.85rem;cursor:pointer;color:var(--color-neutral-600);">취소</button>
+          <button onclick="submitPost()" id="submit-btn" style="padding:0.5rem 1.25rem;background:var(--color-primary-500);color:white;border:none;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer;">등록하기</button>
+        </div>
       </div>
-    )}
+
+      <!-- Edit form (hidden) -->
+      <div id="edit-form" style="display:none;background:#fffbeb;border:1px solid #fbbf24;border-radius:14px;padding:1.5rem;margin-bottom:1.5rem;">
+        <div style="font-size:0.82rem;font-weight:600;color:#d97706;margin-bottom:0.75rem;">글 수정</div>
+        <input id="edit-title" type="text" maxlength="200" style="width:100%;padding:0.6rem 0.75rem;border:1px solid #fbbf24;border-radius:8px;font-size:0.95rem;margin-bottom:0.75rem;box-sizing:border-box;font-weight:600;" />
+        <textarea id="edit-body" rows="6" style="width:100%;padding:0.75rem;border:1px solid #fbbf24;border-radius:8px;font-size:0.9rem;resize:vertical;margin-bottom:1rem;box-sizing:border-box;line-height:1.6;"></textarea>
+        <input type="hidden" id="edit-id" />
+        <div style="display:flex;justify-content:flex-end;gap:0.5rem;">
+          <button onclick="cancelEdit()" style="padding:0.5rem 1rem;border:1px solid var(--color-border);border-radius:8px;background:white;font-size:0.85rem;cursor:pointer;">취소</button>
+          <button onclick="saveEdit()" style="padding:0.5rem 1.25rem;background:#d97706;color:white;border:none;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer;">수정 완료</button>
+        </div>
+      </div>
+
+      <!-- User posts list -->
+      <div id="user-posts" style="display:grid;grid-template-columns:1fr;gap:1rem;">
+        <div style="text-align:center;padding:2rem;color:var(--color-neutral-400);font-size:0.9rem;">불러오는 중...</div>
+      </div>
+
+      <!-- Pagination -->
+      <div id="user-pagination" style="display:flex;justify-content:center;gap:0.5rem;margin-top:1.5rem;"></div>
+    </div>
   </div>
+
+  <script is:inline define:vars={{ category }}>
+    var _category = category;
+    var _currentUser = null;
+    var _currentPage = 1;
+
+    function escapeHtml(s) {
+      if (!s) return '';
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+    function formatDate(d) {
+      var dt = new Date(d);
+      return dt.getFullYear() + '.' + String(dt.getMonth()+1).padStart(2,'0') + '.' + String(dt.getDate()).padStart(2,'0');
+    }
+
+    // Check auth
+    fetch('/api/auth/me', { credentials: 'include' })
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .then(function(data) {
+        if (data && data.user) {
+          _currentUser = data.user;
+          document.getElementById('write-btn-area').innerHTML =
+            '<button onclick="toggleWriteForm()" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.6rem 1.25rem;background:var(--color-primary-500);color:white;border:none;border-radius:10px;font-size:0.88rem;font-weight:600;cursor:pointer;white-space:nowrap;">' +
+            '<svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>' +
+            '글쓰기</button>';
+        }
+      });
+
+    function toggleWriteForm() {
+      var f = document.getElementById('write-form');
+      f.style.display = f.style.display === 'none' ? 'block' : 'none';
+      document.getElementById('edit-form').style.display = 'none';
+    }
+
+    function submitPost() {
+      var title = document.getElementById('write-title').value.trim();
+      var body = document.getElementById('write-body').value.trim();
+      if (!title) { alert('제목을 입력해주세요.'); return; }
+      if (!body) { alert('내용을 입력해주세요.'); return; }
+
+      var btn = document.getElementById('submit-btn');
+      btn.disabled = true; btn.textContent = '등록 중...';
+
+      fetch('/api/posts', {
+        method: 'POST', credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ category: _category, title: title, body: body })
+      })
+      .then(function(r) {
+        if (!r.ok) throw new Error('Failed');
+        document.getElementById('write-title').value = '';
+        document.getElementById('write-body').value = '';
+        document.getElementById('write-form').style.display = 'none';
+        btn.disabled = false; btn.textContent = '등록하기';
+        _currentPage = 1;
+        loadUserPosts();
+      })
+      .catch(function() {
+        btn.disabled = false; btn.textContent = '등록하기';
+        alert('글 등록에 실패했습니다. 로그인 상태를 확인해주세요.');
+      });
+    }
+
+    function startEdit(id, title, body) {
+      document.getElementById('edit-form').style.display = 'block';
+      document.getElementById('write-form').style.display = 'none';
+      document.getElementById('edit-id').value = id;
+      document.getElementById('edit-title').value = title;
+      document.getElementById('edit-body').value = body;
+      document.getElementById('edit-form').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function cancelEdit() {
+      document.getElementById('edit-form').style.display = 'none';
+    }
+
+    function saveEdit() {
+      var id = document.getElementById('edit-id').value;
+      var title = document.getElementById('edit-title').value.trim();
+      var body = document.getElementById('edit-body').value.trim();
+      if (!title || !body) { alert('제목과 내용을 모두 입력해주세요.'); return; }
+
+      fetch('/api/posts/' + id, {
+        method: 'PUT', credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: title, body: body })
+      })
+      .then(function(r) {
+        if (!r.ok) throw new Error('Failed');
+        document.getElementById('edit-form').style.display = 'none';
+        loadUserPosts();
+      })
+      .catch(function() { alert('수정에 실패했습니다.'); });
+    }
+
+    function deletePost(id) {
+      if (!confirm('정말 삭제하시겠습니까?')) return;
+      fetch('/api/posts/' + id, { method: 'DELETE', credentials: 'include' })
+        .then(function(r) {
+          if (!r.ok) throw new Error('Failed');
+          loadUserPosts();
+        })
+        .catch(function() { alert('삭제에 실패했습니다.'); });
+    }
+
+    function loadUserPosts() {
+      fetch('/api/posts?category=' + _category + '&page=' + _currentPage + '&limit=10')
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          var el = document.getElementById('user-posts');
+          var posts = data.posts || [];
+
+          if (!posts.length) {
+            el.innerHTML = '<div style="text-align:center;padding:2.5rem;color:var(--color-neutral-400);font-size:0.9rem;background:white;border-radius:14px;border:1px solid var(--color-border);">' +
+              (_currentUser ? '아직 사용자 글이 없습니다. 첫 글을 작성해보세요!' : '아직 사용자 글이 없습니다.') +
+              '</div>';
+            document.getElementById('user-pagination').innerHTML = '';
+            return;
+          }
+
+          var html = '';
+          posts.forEach(function(p) {
+            var isOwner = _currentUser && _currentUser.id === p.author_id;
+            var initial = (p.author_nickname || '?')[0];
+            html += '<article style="background:white;border:1px solid var(--color-border);border-radius:14px;padding:1.25rem 1.5rem;transition:box-shadow 0.2s;" onmouseover="this.style.boxShadow=\'0 2px 12px rgba(0,0,0,0.06)\'" onmouseout="this.style.boxShadow=\'none\'">' +
+              '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.6rem;">' +
+                '<div style="display:flex;align-items:center;gap:0.5rem;">' +
+                  '<span style="width:28px;height:28px;border-radius:50%;background:var(--color-primary-100);color:var(--color-primary-600);display:inline-flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;">' + escapeHtml(initial) + '</span>' +
+                  '<span style="font-size:0.82rem;font-weight:600;color:var(--color-neutral-700);">' + escapeHtml(p.author_nickname) + '</span>' +
+                  '<span style="font-size:0.72rem;color:var(--color-neutral-400);">' + formatDate(p.created_at) + '</span>' +
+                  (p.updated_at !== p.created_at ? '<span style="font-size:0.68rem;color:var(--color-neutral-400);">(수정됨)</span>' : '') +
+                '</div>' +
+                (isOwner ? '<div style="display:flex;gap:0.3rem;">' +
+                  '<button onclick="startEdit(' + p.id + ',\'' + escapeHtml(p.title).replace(/'/g,"\\'") + '\',\'' + escapeHtml(p.body).replace(/'/g,"\\'").replace(/\n/g,"\\n") + '\')" style="font-size:0.72rem;padding:0.2rem 0.5rem;border:1px solid var(--color-border);border-radius:6px;background:white;cursor:pointer;color:var(--color-neutral-500);">수정</button>' +
+                  '<button onclick="deletePost(' + p.id + ')" style="font-size:0.72rem;padding:0.2rem 0.5rem;border:1px solid #fca5a5;border-radius:6px;background:#fef2f2;cursor:pointer;color:#dc2626;">삭제</button>' +
+                '</div>' : '') +
+              '</div>' +
+              '<h3 style="font-size:1.05rem;font-weight:700;color:var(--color-neutral-800);margin-bottom:0.5rem;line-height:1.4;">' + escapeHtml(p.title) + '</h3>' +
+              '<div style="font-size:0.9rem;color:var(--color-neutral-600);line-height:1.7;white-space:pre-wrap;">' + escapeHtml(p.body) + '</div>' +
+            '</article>';
+          });
+          el.innerHTML = html;
+
+          // Pagination
+          var pag = data.pagination || {};
+          var pagEl = document.getElementById('user-pagination');
+          if (pag.totalPages <= 1) { pagEl.innerHTML = ''; return; }
+          var pagHtml = '';
+          for (var i = 1; i <= pag.totalPages; i++) {
+            var active = i === pag.page;
+            pagHtml += '<button onclick="goPage(' + i + ')" style="width:36px;height:36px;border-radius:8px;border:1px solid ' + (active ? 'var(--color-primary-500)' : 'var(--color-border)') + ';background:' + (active ? 'var(--color-primary-500)' : 'white') + ';color:' + (active ? 'white' : 'var(--color-neutral-600)') + ';font-size:0.85rem;font-weight:600;cursor:pointer;">' + i + '</button>';
+          }
+          pagEl.innerHTML = pagHtml;
+        })
+        .catch(function() {
+          document.getElementById('user-posts').innerHTML = '<div style="text-align:center;padding:2rem;color:var(--color-neutral-400);">글을 불러올 수 없습니다.</div>';
+        });
+    }
+
+    function goPage(p) {
+      _currentPage = p;
+      loadUserPosts();
+    }
+
+    // Init
+    loadUserPosts();
+  </script>
 </BaseLayout>
