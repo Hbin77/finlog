@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const terms = [
+  {
+    term: '비상금',
+    desc: '예상치 못한 지출(실직, 병원비, 자동차 수리 등)에 대비해 미리 마련해두는 자금입니다. 보통 월 생활비의 3~6개월 치를 권장하며, 입출금이 자유로운 계좌나 CMA에 보관하는 것이 좋습니다.',
+  },
+  {
+    term: '연말정산',
+    desc: '1년간 납부한 근로소득세를 정산하는 절차입니다. 소득공제와 세액공제 항목을 꼼꼼히 챙기면 "13월의 월급"이라 불리는 환급금을 받을 수 있습니다. 매년 1월 중순 국세청 홈택스에서 간소화 서비스가 열립니다.',
+  },
+  {
+    term: 'ISA (개인종합자산관리계좌)',
+    desc: '하나의 계좌에서 예금, 펀드, ETF 등 다양한 금융상품에 투자하면서 비과세·분리과세 혜택을 받을 수 있는 절세 계좌입니다. 가입 후 3년 이상 유지하면 최대 200~400만원까지 비과세 혜택이 적용됩니다.',
+  },
+  {
+    term: 'ETF (상장지수펀드)',
+    desc: '주식시장에 상장되어 주식처럼 실시간 매매가 가능한 펀드입니다. KOSPI200, S&P500 같은 지수를 추종하는 상품이 대표적이며, 소액으로 분산투자가 가능하고 일반 펀드보다 수수료가 저렴합니다.',
+  },
+  {
+    term: '연금저축',
+    desc: '노후 대비를 위한 장기 저축·투자 상품으로, 연간 납입액의 최대 900만원(IRP 포함)까지 세액공제를 받을 수 있습니다. 총급여 5,500만원 이하 시 16.5%, 초과 시 13.2%의 세액공제율이 적용됩니다.',
+  },
+  {
+    term: '신용점수',
+    desc: '개인의 신용도를 수치로 나타낸 것으로, 1~1000점 범위입니다(NICE 기준). 대출 금리, 신용카드 발급, 전세자금대출 등에 직접적인 영향을 미칩니다. 연체 없이 꾸준히 카드 대금을 납부하고, 불필요한 대출을 줄이면 점수가 올라갑니다.',
+  },
+  {
+    term: '복리',
+    desc: '원금뿐 아니라 이자에도 이자가 붙는 방식입니다. "이자의 이자"라고도 불리며, 투자 기간이 길어질수록 단리 대비 수익 차이가 기하급수적으로 커집니다. 장기 투자의 핵심 원리입니다.',
+  },
+  {
+    term: '72의 법칙',
+    desc: '투자 원금이 2배가 되는 데 걸리는 대략적인 시간을 계산하는 간편 공식입니다. 72 ÷ 연수익률(%) = 원금 2배 소요 기간(년). 예를 들어 연 6% 수익률이면 72÷6 = 약 12년 만에 원금이 2배가 됩니다.',
+  },
+];
+---
+
+<BaseLayout title="재테크 위키 | 핀로그" description="2030 직장인이 알아야 할 금융 용어와 개념을 쉽게 정리했습니다.">
+  <section style="max-width: var(--container-max-width); margin: 0 auto; padding: 2.5rem 1rem 4rem;">
+    <!-- Hero -->
+    <div style="text-align: center; margin-bottom: 2.5rem;">
+      <h1 style="font-size: 2rem; font-weight: 800; color: var(--color-neutral-900); margin-bottom: 0.5rem;">재테크 위키</h1>
+      <p style="font-size: 1.05rem; color: var(--color-neutral-500); max-width: 520px; margin: 0 auto;">2030 직장인이 알아야 할 금융 용어와 개념 정리</p>
+    </div>
+
+    <!-- Glossary -->
+    <div style="max-width: 720px; margin: 0 auto 3rem; display: flex; flex-direction: column; gap: 0.75rem;">
+      {terms.map((item) => (
+        <details style="background: white; border: 1px solid var(--color-border); border-radius: 12px; overflow: hidden;">
+          <summary style="padding: 1rem 1.25rem; cursor: pointer; font-size: 1.05rem; font-weight: 700; color: var(--color-neutral-800); list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; -webkit-user-select: none; user-select: none;">
+            <span style="display: flex; align-items: center; gap: 0.6rem;">
+              <span style="display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: var(--color-primary-50); color: var(--color-primary-600); font-size: 0.8rem; font-weight: 800;">Q</span>
+              {item.term}
+            </span>
+            <svg style="width: 20px; height: 20px; color: var(--color-neutral-400); flex-shrink: 0; transition: transform 0.2s;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+          </summary>
+          <div style="padding: 0 1.25rem 1.15rem 1.25rem; padding-left: calc(1.25rem + 28px + 0.6rem); font-size: 0.92rem; line-height: 1.7; color: var(--color-neutral-600);">
+            {item.desc}
+          </div>
+        </details>
+      ))}
+    </div>
+
+    <!-- 용어 추가 요청 -->
+    <div style="max-width: 720px; margin: 0 auto; background: white; border-radius: 16px; padding: 1.5rem; border: 1px solid var(--color-border); text-align: center;">
+      <h2 style="font-size: 1.2rem; font-weight: 700; color: var(--color-neutral-900); margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+        <span style="font-size: 1.3rem;">📝</span> 용어 추가 요청
+      </h2>
+      <p style="font-size: 0.88rem; color: var(--color-neutral-500); margin-bottom: 1.25rem;">추가로 알고 싶은 금융 용어나 개념이 있다면 커뮤니티 게시판에서 요청해주세요!</p>
+      <a href="/community/" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.6rem 1.25rem; background: var(--color-primary-500); color: white; border-radius: 10px; font-size: 0.9rem; font-weight: 600; text-decoration: none; transition: background 0.2s;">
+        커뮤니티에서 요청하기
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <style is:inline>
+    details[open] summary svg {
+      transform: rotate(180deg);
+    }
+    details summary::-webkit-details-marker {
+      display: none;
+    }
+    details summary::marker {
+      display: none;
+      content: '';
+    }
+  </style>
+</BaseLayout>

@@ -5,6 +5,7 @@ const navLinks = [
   { href: '/category/tax/', label: '세금/연말정산' },
   { href: '/category/tools/', label: '재테크 도구' },
   { href: '/category/tips/', label: '절약 팁' },
+  { href: '/community/', label: '커뮤니티' },
   { href: '/about/', label: '소개' },
 ];
 
@@ -22,6 +23,7 @@ const currentPath = Astro.url.pathname;
 
       <!-- Desktop Navigation -->
       <nav class="hidden md:flex items-center gap-6 lg:gap-8" aria-label="메인 네비게이션">
+        <span id="header-user-indicator" style="display:none;font-size:0.78rem;color:var(--color-neutral-500);background:var(--color-primary-50);padding:0.25rem 0.6rem;border-radius:999px;font-weight:500;"></span>
         {navLinks.map((link) => (
           <a
             href={link.href}
@@ -65,4 +67,20 @@ const currentPath = Astro.url.pathname;
       ))}
     </nav>
   </div>
+<script is:inline>
+  (function() {
+    fetch('/api/auth/me', { credentials: 'include' })
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .then(function(data) {
+        if (data && data.user) {
+          var el = document.getElementById('header-user-indicator');
+          if (el) {
+            el.textContent = (data.user.nickname || data.user.name || '사용자') + '님';
+            el.style.display = 'inline-block';
+          }
+        }
+      })
+      .catch(function() {});
+  })();
+</script>
 </header>

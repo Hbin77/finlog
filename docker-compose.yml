@@ -7,3 +7,41 @@ services:
     restart: unless-stopped
     environment:
       - TZ=Asia/Seoul
+    depends_on:
+      - api
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+
+  api:
+    build: ./api-server
+    container_name: finlog-api
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Seoul
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=finlog
+      - POSTGRES_USER=finlog
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-finlog123}
+      - JWT_SECRET=${JWT_SECRET:-change-this-secret}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - KAKAO_CLIENT_ID=${KAKAO_CLIENT_ID}
+      - KAKAO_CLIENT_SECRET=${KAKAO_CLIENT_SECRET}
+      - SITE_URL=${SITE_URL:-https://finlog.site}
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: finlog-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=finlog
+      - POSTGRES_USER=finlog
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-finlog123}
+      - TZ=Asia/Seoul
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
