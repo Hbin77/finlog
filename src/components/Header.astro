@@ -10,7 +10,6 @@ const navLinks = [
 ];
 
 const currentPath = Astro.url.pathname;
-const CF_SITE_KEY = import.meta.env.PUBLIC_CF_TURNSTILE_SITE_KEY || '';
 ---
 
 <header class="sticky top-0 z-50 bg-white border-b border-[var(--color-border)] shadow-[var(--shadow-sm)]">
@@ -181,8 +180,8 @@ const CF_SITE_KEY = import.meta.env.PUBLIC_CF_TURNSTILE_SITE_KEY || '';
 <!-- Cloudflare Turnstile -->
 <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
 
-<script is:inline define:vars={{ CF_SITE_KEY }}>
-  var _cfSiteKey = CF_SITE_KEY;
+<script is:inline>
+  var _cfSiteKey = document.querySelector('meta[name="cf-site-key"]')?.content || '';
   var _turnstileLoginId = null;
   var _turnstileSignupId = null;
   var _turnstileLoginToken = '';
