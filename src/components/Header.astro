@@ -181,6 +181,7 @@ const currentPath = Astro.url.pathname;
 <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
 
 <script is:inline>
+  function _escHtml(s) { if (!s) return ''; return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
   var _cfSiteKey = document.querySelector('meta[name="cf-site-key"]')?.content || '';
   var _turnstileLoginId = null;
   var _turnstileSignupId = null;
@@ -274,7 +275,12 @@ const currentPath = Astro.url.pathname;
       } else {
         showMsg('login-msg', res.data.error || '로그인에 실패했습니다.', true);
         if (res.data.needVerify) {
-          document.getElementById('login-msg').innerHTML += '<br/><button onclick="resendVerify(\'' + email + '\')" style="margin-top:0.5rem;font-size:0.78rem;color:var(--color-primary-500);background:none;border:none;cursor:pointer;text-decoration:underline;">인증 이메일 다시 보내기</button>';
+          var resendBtn = document.createElement('button');
+          resendBtn.textContent = '인증 이메일 다시 보내기';
+          resendBtn.style.cssText = 'margin-top:0.5rem;font-size:0.78rem;color:var(--color-primary-500);background:none;border:none;cursor:pointer;text-decoration:underline;display:block;';
+          resendBtn.addEventListener('click', function() { resendVerify(email); });
+          document.getElementById('login-msg').appendChild(document.createElement('br'));
+          document.getElementById('login-msg').appendChild(resendBtn);
         }
         if (typeof turnstile !== 'undefined' && _turnstileLoginId !== null) turnstile.reset(_turnstileLoginId);
       }
@@ -360,7 +366,7 @@ const currentPath = Astro.url.pathname;
         var desktop = document.getElementById('header-auth');
         var mobile = document.getElementById('header-auth-mobile');
         if (data && data.user) {
-          var name = data.user.nickname || '사용자';
+          var name = _escHtml(data.user.nickname || '사용자');
           var loggedIn = '<a href="/mypage/" style="font-size:0.8rem;color:var(--color-neutral-600);background:var(--color-primary-50);padding:0.3rem 0.7rem;border-radius:999px;font-weight:500;text-decoration:none;display:inline-flex;align-items:center;gap:0.3rem;">' +
             '<svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>' +
             name + '</a>' +

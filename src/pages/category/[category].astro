@@ -249,7 +249,7 @@ const breadcrumbItems = [
                   (p.updated_at !== p.created_at ? '<span style="font-size:0.68rem;color:var(--color-neutral-400);">(수정됨)</span>' : '') +
                 '</div>' +
                 (isOwner ? '<div style="display:flex;gap:0.3rem;">' +
-                  '<button onclick="startEdit(' + p.id + ',\'' + escapeHtml(p.title).replace(/'/g,"\\'") + '\',\'' + escapeHtml(p.body).replace(/'/g,"\\'").replace(/\n/g,"\\n") + '\')" style="font-size:0.72rem;padding:0.2rem 0.5rem;border:1px solid var(--color-border);border-radius:6px;background:white;cursor:pointer;color:var(--color-neutral-500);">수정</button>' +
+                  '<button class="edit-post-btn" data-id="' + p.id + '" data-title="' + escapeHtml(p.title).replace(/"/g,'&quot;') + '" data-body="' + escapeHtml(p.body).replace(/"/g,'&quot;') + '" style="font-size:0.72rem;padding:0.2rem 0.5rem;border:1px solid var(--color-border);border-radius:6px;background:white;cursor:pointer;color:var(--color-neutral-500);">수정</button>' +
                   '<button onclick="deletePost(' + p.id + ')" style="font-size:0.72rem;padding:0.2rem 0.5rem;border:1px solid #fca5a5;border-radius:6px;background:#fef2f2;cursor:pointer;color:#dc2626;">삭제</button>' +
                 '</div>' : '') +
               '</div>' +
@@ -258,6 +258,13 @@ const breadcrumbItems = [
             '</article>';
           });
           el.innerHTML = html;
+
+          // Bind edit buttons via data attributes (safe from XSS)
+          el.querySelectorAll('.edit-post-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+              startEdit(btn.getAttribute('data-id'), btn.getAttribute('data-title'), btn.getAttribute('data-body'));
+            });
+          });
 
           // Pagination
           var pag = data.pagination || {};

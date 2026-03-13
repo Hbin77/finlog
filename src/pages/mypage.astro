@@ -137,7 +137,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
           var avatar = document.getElementById('profile-avatar');
           if (_myUser.avatar_url) {
-            avatar.innerHTML = '<img src="' + _myUser.avatar_url + '" style="width:100%;height:100%;object-fit:cover;" />';
+            var img = document.createElement('img');
+            img.src = _myUser.avatar_url;
+            img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
+            avatar.innerHTML = '';
+            avatar.appendChild(img);
           } else {
             avatar.textContent = (_myUser.nickname || '?')[0];
           }

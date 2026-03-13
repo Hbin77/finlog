@@ -102,7 +102,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           var ws = document.getElementById('write-section');
           if (data && data.user) {
             currentUser = data.user;
-            var name = data.user.nickname || data.user.name || '사용자';
+            var name = escapeHtml(data.user.nickname || data.user.name || '사용자');
             el.innerHTML = '<span style="font-size:0.85rem;color:var(--color-neutral-600);">' + name + '님</span>' +
               '<button onclick="logout()" style="padding:0.35rem 0.75rem;border:1px solid var(--color-border);border-radius:8px;background:white;font-size:0.8rem;cursor:pointer;color:var(--color-neutral-600);">로그아웃</button>';
             ws.style.display = 'block';

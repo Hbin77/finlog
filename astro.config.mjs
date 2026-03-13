@@ -12,7 +12,13 @@ export default defineConfig({
   site: siteUrl,
 
   integrations: [
-    sitemap(),
+    sitemap({
+      filter: (page) =>
+        !page.includes('/mypage') &&
+        !page.includes('/reset-password') &&
+        !page.includes('/community') &&
+        !page.includes('/404'),
+    }),
     mdx(),
   ],
 
