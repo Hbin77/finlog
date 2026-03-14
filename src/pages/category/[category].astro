@@ -144,6 +144,10 @@ const breadcrumbItems = [
         }
       });
 
+    window.toggleWriteForm = toggleWriteForm;
+    window.deletePost = deletePost;
+    window.goPage = goPage;
+
     function toggleWriteForm() {
       var f = document.getElementById('write-form');
       f.style.display = f.style.display === 'none' ? 'block' : 'none';
