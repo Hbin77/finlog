@@ -90,8 +90,8 @@ const breadcrumbItems = [
         <input id="write-title" type="text" placeholder="제목을 입력하세요" maxlength="200" style="width:100%;padding:0.6rem 0.75rem;border:1px solid var(--color-border);border-radius:8px;font-size:0.95rem;margin-bottom:0.75rem;box-sizing:border-box;font-weight:600;" />
         <textarea id="write-body" placeholder="내용을 작성해주세요... 재테크 꿀팁, 경험, 질문 등 자유롭게 공유하세요." rows="6" style="width:100%;padding:0.75rem;border:1px solid var(--color-border);border-radius:8px;font-size:0.9rem;resize:vertical;margin-bottom:1rem;box-sizing:border-box;line-height:1.6;"></textarea>
         <div style="display:flex;justify-content:flex-end;gap:0.5rem;">
-          <button onclick="toggleWriteForm()" style="padding:0.5rem 1rem;border:1px solid var(--color-border);border-radius:8px;background:white;font-size:0.85rem;cursor:pointer;color:var(--color-neutral-600);">취소</button>
-          <button onclick="submitPost()" id="submit-btn" style="padding:0.5rem 1.25rem;background:var(--color-primary-500);color:white;border:none;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer;">등록하기</button>
+          <button id="write-cancel-btn" style="padding:0.5rem 1rem;border:1px solid var(--color-border);border-radius:8px;background:white;font-size:0.85rem;cursor:pointer;color:var(--color-neutral-600);">취소</button>
+          <button id="submit-btn" style="padding:0.5rem 1.25rem;background:var(--color-primary-500);color:white;border:none;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer;">등록하기</button>
         </div>
       </div>
 
@@ -102,8 +102,8 @@ const breadcrumbItems = [
         <textarea id="edit-body" rows="6" style="width:100%;padding:0.75rem;border:1px solid #fbbf24;border-radius:8px;font-size:0.9rem;resize:vertical;margin-bottom:1rem;box-sizing:border-box;line-height:1.6;"></textarea>
         <input type="hidden" id="edit-id" />
         <div style="display:flex;justify-content:flex-end;gap:0.5rem;">
-          <button onclick="cancelEdit()" style="padding:0.5rem 1rem;border:1px solid var(--color-border);border-radius:8px;background:white;font-size:0.85rem;cursor:pointer;">취소</button>
-          <button onclick="saveEdit()" style="padding:0.5rem 1.25rem;background:#d97706;color:white;border:none;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer;">수정 완료</button>
+          <button id="edit-cancel-btn" style="padding:0.5rem 1rem;border:1px solid var(--color-border);border-radius:8px;background:white;font-size:0.85rem;cursor:pointer;">취소</button>
+          <button id="edit-save-btn" style="padding:0.5rem 1.25rem;background:#d97706;color:white;border:none;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer;">수정 완료</button>
         </div>
       </div>
 
@@ -130,23 +130,6 @@ const breadcrumbItems = [
       var dt = new Date(d);
       return dt.getFullYear() + '.' + String(dt.getMonth()+1).padStart(2,'0') + '.' + String(dt.getDate()).padStart(2,'0');
     }
-
-    // Check auth
-    fetch('/api/auth/me', { credentials: 'include' })
-      .then(function(r) { return r.ok ? r.json() : null; })
-      .then(function(data) {
-        if (data && data.user) {
-          _currentUser = data.user;
-          document.getElementById('write-btn-area').innerHTML =
-            '<button onclick="toggleWriteForm()" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.6rem 1.25rem;background:var(--color-primary-500);color:white;border:none;border-radius:10px;font-size:0.88rem;font-weight:600;cursor:pointer;white-space:nowrap;">' +
-            '<svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>' +
-            '글쓰기</button>';
-        }
-      });
-
-    window.toggleWriteForm = toggleWriteForm;
-    window.deletePost = deletePost;
-    window.goPage = goPage;
 
     function toggleWriteForm() {
       var f = document.getElementById('write-form');
@@ -254,7 +237,7 @@ const breadcrumbItems = [
                 '</div>' +
                 (isOwner ? '<div style="display:flex;gap:0.3rem;">' +
                   '<button class="edit-post-btn" data-id="' + p.id + '" data-title="' + escapeHtml(p.title).replace(/"/g,'&quot;') + '" data-body="' + escapeHtml(p.body).replace(/"/g,'&quot;') + '" style="font-size:0.72rem;padding:0.2rem 0.5rem;border:1px solid var(--color-border);border-radius:6px;background:white;cursor:pointer;color:var(--color-neutral-500);">수정</button>' +
-                  '<button onclick="deletePost(' + p.id + ')" style="font-size:0.72rem;padding:0.2rem 0.5rem;border:1px solid #fca5a5;border-radius:6px;background:#fef2f2;cursor:pointer;color:#dc2626;">삭제</button>' +
+                  '<button class="delete-post-btn" data-id="' + p.id + '" style="font-size:0.72rem;padding:0.2rem 0.5rem;border:1px solid #fca5a5;border-radius:6px;background:#fef2f2;cursor:pointer;color:#dc2626;">삭제</button>' +
                 '</div>' : '') +
               '</div>' +
               '<h3 style="font-size:1.05rem;font-weight:700;color:var(--color-neutral-800);margin-bottom:0.5rem;line-height:1.4;">' + escapeHtml(p.title) + '</h3>' +
@@ -263,10 +246,17 @@ const breadcrumbItems = [
           });
           el.innerHTML = html;
 
-          // Bind edit buttons via data attributes (safe from XSS)
+          // Bind edit buttons
           el.querySelectorAll('.edit-post-btn').forEach(function(btn) {
             btn.addEventListener('click', function() {
               startEdit(btn.getAttribute('data-id'), btn.getAttribute('data-title'), btn.getAttribute('data-body'));
+            });
+          });
+
+          // Bind delete buttons
+          el.querySelectorAll('.delete-post-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+              deletePost(parseInt(btn.getAttribute('data-id')));
             });
           });
 
@@ -277,19 +267,43 @@ const breadcrumbItems = [
           var pagHtml = '';
           for (var i = 1; i <= pag.totalPages; i++) {
             var active = i === pag.page;
-            pagHtml += '<button onclick="goPage(' + i + ')" style="width:36px;height:36px;border-radius:8px;border:1px solid ' + (active ? 'var(--color-primary-500)' : 'var(--color-border)') + ';background:' + (active ? 'var(--color-primary-500)' : 'white') + ';color:' + (active ? 'white' : 'var(--color-neutral-600)') + ';font-size:0.85rem;font-weight:600;cursor:pointer;">' + i + '</button>';
+            pagHtml += '<button class="page-btn" data-page="' + i + '" style="width:36px;height:36px;border-radius:8px;border:1px solid ' + (active ? 'var(--color-primary-500)' : 'var(--color-border)') + ';background:' + (active ? 'var(--color-primary-500)' : 'white') + ';color:' + (active ? 'white' : 'var(--color-neutral-600)') + ';font-size:0.85rem;font-weight:600;cursor:pointer;">' + i + '</button>';
           }
           pagEl.innerHTML = pagHtml;
+
+          // Bind pagination buttons
+          pagEl.querySelectorAll('.page-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+              _currentPage = parseInt(btn.getAttribute('data-page'));
+              loadUserPosts();
+            });
+          });
         })
         .catch(function() {
           document.getElementById('user-posts').innerHTML = '<div style="text-align:center;padding:2rem;color:var(--color-neutral-400);">글을 불러올 수 없습니다.</div>';
         });
     }
 
-    function goPage(p) {
-      _currentPage = p;
-      loadUserPosts();
-    }
+    // Bind static buttons
+    document.getElementById('write-cancel-btn').addEventListener('click', toggleWriteForm);
+    document.getElementById('submit-btn').addEventListener('click', submitPost);
+    document.getElementById('edit-cancel-btn').addEventListener('click', cancelEdit);
+    document.getElementById('edit-save-btn').addEventListener('click', saveEdit);
+
+    // Check auth & create write button
+    fetch('/api/auth/me', { credentials: 'include' })
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .then(function(data) {
+        if (data && data.user) {
+          _currentUser = data.user;
+          var area = document.getElementById('write-btn-area');
+          var btn = document.createElement('button');
+          btn.style.cssText = 'display:inline-flex;align-items:center;gap:0.5rem;padding:0.6rem 1.25rem;background:var(--color-primary-500);color:white;border:none;border-radius:10px;font-size:0.88rem;font-weight:600;cursor:pointer;white-space:nowrap;';
+          btn.innerHTML = '<svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg> 글쓰기';
+          btn.addEventListener('click', toggleWriteForm);
+          area.appendChild(btn);
+        }
+      });
 
     // Init
     loadUserPosts();
