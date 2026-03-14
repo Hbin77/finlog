@@ -102,7 +102,7 @@ const postSlug = post.slug;
             <span>{readingTime}분 읽기</span>
           </div>
           <div style="margin-top:0.75rem;">
-            <button id="suggest-edit-btn" onclick="openSuggestionModal()" style="display:none;font-size:0.78rem;padding:0.3rem 0.75rem;border:1px solid var(--color-border);border-radius:8px;background:white;color:var(--color-neutral-600);cursor:pointer;align-items:center;gap:0.3rem;">
+            <button id="suggest-edit-btn" style="display:none;font-size:0.78rem;padding:0.3rem 0.75rem;border:1px solid var(--color-border);border-radius:8px;background:white;color:var(--color-neutral-600);cursor:pointer;align-items:center;gap:0.3rem;">
               <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
               수정 제안
             </button>
@@ -140,13 +140,18 @@ const postSlug = post.slug;
             <input id="sug-reason" type="text" placeholder="예: 최신 금리 정보가 변경되었습니다" style="width:100%;padding:0.5rem 0.6rem;border:1px solid #86efac;border-radius:8px;font-size:0.88rem;box-sizing:border-box;" />
           </div>
           <div style="display:flex;justify-content:flex-end;gap:0.5rem;">
-            <button onclick="closeSuggestionModal()" style="padding:0.45rem 1rem;border:1px solid var(--color-border);border-radius:8px;background:white;font-size:0.82rem;cursor:pointer;">취소</button>
-            <button onclick="submitSuggestion()" id="sug-submit-btn" style="padding:0.45rem 1rem;background:#16a34a;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:600;cursor:pointer;">제안 보내기</button>
+            <button id="sug-cancel-btn" style="padding:0.45rem 1rem;border:1px solid var(--color-border);border-radius:8px;background:white;font-size:0.82rem;cursor:pointer;">취소</button>
+            <button id="sug-submit-btn" style="padding:0.45rem 1rem;background:#16a34a;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:600;cursor:pointer;">제안 보내기</button>
           </div>
         </div>
 
         <script is:inline define:vars={{ postSlug }}>
           var _postSlug = postSlug;
+
+          // Bind buttons
+          document.getElementById('suggest-edit-btn').addEventListener('click', openSuggestionModal);
+          document.getElementById('sug-cancel-btn').addEventListener('click', closeSuggestionModal);
+          document.getElementById('sug-submit-btn').addEventListener('click', submitSuggestion);
 
           // Show suggest button only for logged in users
           fetch('/api/auth/me', { credentials: 'include' })

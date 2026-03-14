@@ -105,8 +105,8 @@ const {
           자세한 내용은 <a href="/privacy-policy/" style="color:var(--color-primary-500);text-decoration:underline;">개인정보처리방침</a>을 참고하세요.
         </p>
         <div style="display:flex;gap:0.5rem;flex-shrink:0;">
-          <button onclick="acceptCookies()" style="padding:0.5rem 1.25rem;background:var(--color-primary-500);color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:600;cursor:pointer;">동의</button>
-          <button onclick="declineCookies()" style="padding:0.5rem 1rem;background:white;color:#666;border:1px solid #ddd;border-radius:8px;font-size:0.82rem;cursor:pointer;">거부</button>
+          <button id="cookie-accept-btn" style="padding:0.5rem 1.25rem;background:var(--color-primary-500);color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:600;cursor:pointer;">동의</button>
+          <button id="cookie-decline-btn" style="padding:0.5rem 1rem;background:white;color:#666;border:1px solid #ddd;border-radius:8px;font-size:0.82rem;cursor:pointer;">거부</button>
         </div>
       </div>
     </div>
@@ -127,6 +127,8 @@ const {
         localStorage.setItem('cookie_consent', 'declined');
         document.getElementById('cookie-banner').style.display = 'none';
       }
+      document.getElementById('cookie-accept-btn').addEventListener('click', acceptCookies);
+      document.getElementById('cookie-decline-btn').addEventListener('click', declineCookies);
     </script>
 
     <style is:inline>

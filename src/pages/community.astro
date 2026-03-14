@@ -17,7 +17,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     <!-- Write button + form -->
     <div id="write-section" style="display: none; margin-bottom: 2rem;">
-      <button id="write-toggle-btn" onclick="toggleWriteForm()" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.65rem 1.25rem; background: var(--color-primary-500); color: white; border: none; border-radius: 10px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: background 0.2s;">
+      <button id="write-toggle-btn" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.65rem 1.25rem; background: var(--color-primary-500); color: white; border: none; border-radius: 10px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: background 0.2s;">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
         꿀팁 작성하기
       </button>
@@ -35,8 +35,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
         <textarea id="post-body" placeholder="내용을 작성해주세요..." rows="5" style="width: 100%; padding: 0.75rem; border: 1px solid var(--color-border); border-radius: 8px; font-size: 0.9rem; resize: vertical; margin-bottom: 1rem; box-sizing: border-box;"></textarea>
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
-          <button onclick="toggleWriteForm()" style="padding: 0.5rem 1rem; border: 1px solid var(--color-border); border-radius: 8px; background: white; font-size: 0.85rem; cursor: pointer; color: var(--color-neutral-600);">취소</button>
-          <button onclick="submitPost()" style="padding: 0.5rem 1rem; background: var(--color-primary-500); color: white; border: none; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer;">등록하기</button>
+          <button id="write-cancel-btn" style="padding: 0.5rem 1rem; border: 1px solid var(--color-border); border-radius: 8px; background: white; font-size: 0.85rem; cursor: pointer; color: var(--color-neutral-600);">취소</button>
+          <button id="write-submit-btn" style="padding: 0.5rem 1rem; background: var(--color-primary-500); color: white; border: none; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer;">등록하기</button>
         </div>
       </div>
     </div>
@@ -103,8 +103,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           if (data && data.user) {
             currentUser = data.user;
             var name = escapeHtml(data.user.nickname || data.user.name || '사용자');
-            el.innerHTML = '<span style="font-size:0.85rem;color:var(--color-neutral-600);">' + name + '님</span>' +
-              '<button onclick="logout()" style="padding:0.35rem 0.75rem;border:1px solid var(--color-border);border-radius:8px;background:white;font-size:0.8rem;cursor:pointer;color:var(--color-neutral-600);">로그아웃</button>';
+            el.innerHTML = '<span style="font-size:0.85rem;color:var(--color-neutral-600);">' + name + '님</span>';
+            var logoutBtn = document.createElement('button');
+            logoutBtn.textContent = '로그아웃';
+            logoutBtn.style.cssText = 'padding:0.35rem 0.75rem;border:1px solid var(--color-border);border-radius:8px;background:white;font-size:0.8rem;cursor:pointer;color:var(--color-neutral-600);';
+            logoutBtn.addEventListener('click', logout);
+            el.appendChild(logoutBtn);
             ws.style.display = 'block';
           } else {
             currentUser = null;
@@ -178,7 +182,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         var cc = CATEGORY_COLORS[p.category] || CATEGORY_COLORS['general'];
         var catLabel = CATEGORY_LABELS[p.category] || p.category;
         var initial = (p.author_nickname || '?')[0];
-        html += '<div class="post-card" onclick="openPost(' + p.id + ')" style="background:white;border-radius:14px;padding:1.25rem;border:1px solid var(--color-border);cursor:pointer;transition:box-shadow 0.2s,transform 0.15s;" onmouseover="this.style.boxShadow=\'0 4px 20px rgba(0,0,0,0.08)\';this.style.transform=\'translateY(-2px)\'" onmouseout="this.style.boxShadow=\'none\';this.style.transform=\'none\'">' +
+        html += '<div class="post-card" data-post-id="' + p.id + '" style="background:white;border-radius:14px;padding:1.25rem;border:1px solid var(--color-border);cursor:pointer;transition:box-shadow 0.2s,transform 0.15s;" onmouseover="this.style.boxShadow=\'0 4px 20px rgba(0,0,0,0.08)\';this.style.transform=\'translateY(-2px)\'" onmouseout="this.style.boxShadow=\'none\';this.style.transform=\'none\'">' +
           '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">' +
             '<span style="display:inline-block;font-size:0.72rem;padding:0.2rem 0.6rem;border-radius:999px;background:' + cc.bg + ';color:' + cc.color + ';font-weight:600;">' + catLabel + '</span>' +
             '<span style="font-size:0.75rem;color:var(--color-neutral-400);">' + formatDate(p.created_at) + '</span>' +
@@ -198,6 +202,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         '</div>';
       });
       el.innerHTML = html;
+
+      // Bind post card clicks
+      el.querySelectorAll('.post-card').forEach(function(card) {
+        card.addEventListener('click', function() {
+          openPost(parseInt(card.getAttribute('data-post-id')));
+        });
+      });
     }
 
     function escapeHtml(s) {
@@ -211,9 +222,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       var html = '';
       for (var i = 1; i <= total; i++) {
         var active = i === page;
-        html += '<button onclick="goPage(' + i + ')" style="width:36px;height:36px;border-radius:8px;border:1px solid ' + (active ? 'var(--color-primary-500)' : 'var(--color-border)') + ';background:' + (active ? 'var(--color-primary-500)' : 'white') + ';color:' + (active ? 'white' : 'var(--color-neutral-600)') + ';font-size:0.85rem;font-weight:600;cursor:pointer;">' + i + '</button>';
+        html += '<button class="page-btn" data-page="' + i + '" style="width:36px;height:36px;border-radius:8px;border:1px solid ' + (active ? 'var(--color-primary-500)' : 'var(--color-border)') + ';background:' + (active ? 'var(--color-primary-500)' : 'white') + ';color:' + (active ? 'white' : 'var(--color-neutral-600)') + ';font-size:0.85rem;font-weight:600;cursor:pointer;">' + i + '</button>';
       }
       el.innerHTML = html;
+      el.querySelectorAll('.page-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          goPage(parseInt(btn.getAttribute('data-page')));
+        });
+      });
     }
 
     function goPage(p) {
@@ -236,7 +252,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           var catLabel = CATEGORY_LABELS[p.category] || p.category;
           var cc = CATEGORY_COLORS[p.category] || CATEGORY_COLORS['general'];
           var canDelete = currentUser && (currentUser.id === p.author_id);
-          var html = '<button onclick="closePost()" style="position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--color-neutral-400);line-height:1;">&times;</button>' +
+          var html = '<button class="close-post-btn" style="position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--color-neutral-400);line-height:1;">&times;</button>' +
             '<div style="margin-bottom:1rem;">' +
               '<span style="display:inline-block;font-size:0.75rem;padding:0.25rem 0.7rem;border-radius:999px;background:' + cc.bg + ';color:' + cc.color + ';font-weight:600;">' + escapeHtml(catLabel) + '</span>' +
             '</div>' +
@@ -245,19 +261,33 @@ import BaseLayout from '../layouts/BaseLayout.astro';
               '<span>' + escapeHtml(p.author_nickname || '익명') + '</span>' +
               '<span>&middot;</span>' +
               '<span>' + formatDate(p.created_at) + '</span>' +
-              (canDelete ? '<button onclick="deletePost(' + p.id + ')" style="margin-left:auto;padding:0.3rem 0.7rem;border:1px solid #fca5a5;border-radius:6px;background:#fef2f2;color:#dc2626;font-size:0.75rem;cursor:pointer;">삭제</button>' : '') +
+              (canDelete ? '<button class="delete-post-btn" data-id="' + p.id + '" style="margin-left:auto;padding:0.3rem 0.7rem;border:1px solid #fca5a5;border-radius:6px;background:#fef2f2;color:#dc2626;font-size:0.75rem;cursor:pointer;">삭제</button>' : '') +
             '</div>' +
             '<div style="font-size:0.95rem;line-height:1.8;color:var(--color-neutral-700);white-space:pre-wrap;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--color-border);">' + escapeHtml(p.body) + '</div>' +
             '<div id="comments-section">' +
               '<h3 style="font-size:1rem;font-weight:700;color:var(--color-neutral-800);margin-bottom:1rem;">댓글</h3>' +
               '<div id="comments-list" style="margin-bottom:1rem;"></div>' +
-              (currentUser ? '<div style="display:flex;gap:0.5rem;"><input id="comment-input" type="text" placeholder="댓글을 입력하세요..." style="flex:1;padding:0.5rem 0.75rem;border:1px solid var(--color-border);border-radius:8px;font-size:0.88rem;" onkeydown="if(event.key===\'Enter\')addComment(' + p.id + ')"/><button onclick="addComment(' + p.id + ')" style="padding:0.5rem 1rem;background:var(--color-primary-500);color:white;border:none;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer;white-space:nowrap;">등록</button></div>' : '<p style="font-size:0.85rem;color:var(--color-neutral-400);">댓글을 작성하려면 로그인해주세요.</p>') +
+              (currentUser ? '<div style="display:flex;gap:0.5rem;"><input id="comment-input" type="text" placeholder="댓글을 입력하세요..." style="flex:1;padding:0.5rem 0.75rem;border:1px solid var(--color-border);border-radius:8px;font-size:0.88rem;" /><button class="add-comment-btn" data-post-id="' + p.id + '" style="padding:0.5rem 1rem;background:var(--color-primary-500);color:white;border:none;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer;white-space:nowrap;">등록</button></div>' : '<p style="font-size:0.85rem;color:var(--color-neutral-400);">댓글을 작성하려면 로그인해주세요.</p>') +
             '</div>';
           inner.innerHTML = html;
+
+          // Bind inner buttons
+          inner.querySelector('.close-post-btn').addEventListener('click', closePost);
+          var delBtn = inner.querySelector('.delete-post-btn');
+          if (delBtn) delBtn.addEventListener('click', function() { deletePost(parseInt(delBtn.getAttribute('data-id'))); });
+          var addBtn = inner.querySelector('.add-comment-btn');
+          if (addBtn) {
+            addBtn.addEventListener('click', function() { addComment(parseInt(addBtn.getAttribute('data-post-id'))); });
+            document.getElementById('comment-input').addEventListener('keydown', function(e) {
+              if (e.key === 'Enter') addComment(parseInt(addBtn.getAttribute('data-post-id')));
+            });
+          }
+
           loadComments(p.id);
         })
         .catch(function() {
-          inner.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--color-neutral-400);">게시글을 불러올 수 없습니다.</div><button onclick="closePost()" style="position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--color-neutral-400);">&times;</button>';
+          inner.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--color-neutral-400);">게시글을 불러올 수 없습니다.</div><button class="close-post-btn" style="position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--color-neutral-400);">&times;</button>';
+          inner.querySelector('.close-post-btn').addEventListener('click', closePost);
         });
     }
 
@@ -333,11 +363,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       });
     });
 
+    // Bind static buttons
+    document.getElementById('write-toggle-btn').addEventListener('click', toggleWriteForm);
+    document.getElementById('write-cancel-btn').addEventListener('click', toggleWriteForm);
+    document.getElementById('write-submit-btn').addEventListener('click', submitPost);
+
     // Init
-    document.addEventListener('DOMContentLoaded', function() {
-      checkAuth();
-      loadPosts();
-    });
+    checkAuth();
+    loadPosts();
   </script>
 
   <style is:inline>
