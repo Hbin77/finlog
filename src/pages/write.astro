@@ -1,0 +1,319 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="글쓰기 | 핀로그" description="블로그 글을 작성하세요." noindex={true}>
+  <div class="mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8 py-6 md:py-10">
+
+    <!-- Not logged in -->
+    <div id="not-logged-in" style="display:none;text-align:center;padding:4rem 1rem;">
+      <svg width="48" height="48" fill="none" stroke="#ccc" viewBox="0 0 24 24" style="margin:0 auto 1rem;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+      <p style="font-size:1.1rem;color:var(--color-neutral-500);margin-bottom:1.5rem;">로그인 후 글을 작성할 수 있습니다.</p>
+      <button id="login-btn" style="padding:0.6rem 1.5rem;background:var(--color-primary-500);color:white;border:none;border-radius:10px;font-size:0.9rem;font-weight:600;cursor:pointer;">로그인</button>
+    </div>
+
+    <!-- Editor section -->
+    <div id="editor-section" style="display:none;">
+      <!-- Header -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;">
+        <h1 style="font-size:1.5rem;font-weight:800;color:var(--color-neutral-900);">새 글 작성</h1>
+        <div style="display:flex;gap:0.5rem;">
+          <a href="javascript:history.back()" style="padding:0.5rem 1rem;border:1px solid var(--color-border);border-radius:8px;background:white;font-size:0.85rem;cursor:pointer;color:var(--color-neutral-600);text-decoration:none;">취소</a>
+          <button id="publish-btn" style="padding:0.5rem 1.25rem;background:var(--color-primary-500);color:white;border:none;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer;">발행하기</button>
+        </div>
+      </div>
+
+      <!-- Title -->
+      <input id="post-title" type="text" placeholder="제목을 입력하세요" maxlength="200" style="width:100%;padding:0.75rem 1rem;border:1px solid var(--color-border);border-radius:10px;font-size:1.25rem;font-weight:700;margin-bottom:1rem;box-sizing:border-box;color:var(--color-neutral-900);" />
+
+      <!-- Category + meta row -->
+      <div style="display:flex;gap:0.75rem;margin-bottom:1rem;flex-wrap:wrap;">
+        <select id="post-category" style="padding:0.5rem 0.75rem;border:1px solid var(--color-border);border-radius:8px;font-size:0.88rem;color:var(--color-neutral-700);background:white;">
+          <option value="saving">저축/예금</option>
+          <option value="investing">투자 입문</option>
+          <option value="tax">세금/연말정산</option>
+          <option value="tools">재테크 도구</option>
+          <option value="tips">절약 팁</option>
+          <option value="general">자유</option>
+        </select>
+        <input id="post-image" type="text" placeholder="커버 이미지 URL (선택)" style="flex:1;min-width:200px;padding:0.5rem 0.75rem;border:1px solid var(--color-border);border-radius:8px;font-size:0.88rem;box-sizing:border-box;" />
+      </div>
+
+      <!-- Toolbar -->
+      <div id="toolbar" style="display:flex;flex-wrap:wrap;gap:0.25rem;padding:0.5rem 0.75rem;background:#f8fafc;border:1px solid var(--color-border);border-bottom:none;border-radius:10px 10px 0 0;">
+        <button class="tb" data-action="h2" title="제목 (H2)">H2</button>
+        <button class="tb" data-action="h3" title="소제목 (H3)">H3</button>
+        <span style="width:1px;background:#ddd;margin:0 0.25rem;"></span>
+        <button class="tb" data-action="bold" title="굵게"><b>B</b></button>
+        <button class="tb" data-action="italic" title="기울임"><i>I</i></button>
+        <button class="tb" data-action="strikethrough" title="취소선"><s>S</s></button>
+        <span style="width:1px;background:#ddd;margin:0 0.25rem;"></span>
+        <button class="tb" data-action="ul" title="목록">• 목록</button>
+        <button class="tb" data-action="ol" title="번호 목록">1. 목록</button>
+        <button class="tb" data-action="blockquote" title="인용구">" 인용</button>
+        <span style="width:1px;background:#ddd;margin:0 0.25rem;"></span>
+        <button class="tb" data-action="link" title="링크">🔗 링크</button>
+        <button class="tb" data-action="image" title="이미지">🖼 이미지</button>
+        <button class="tb" data-action="table" title="표">📊 표</button>
+        <span style="width:1px;background:#ddd;margin:0 0.25rem;"></span>
+        <button class="tb" data-action="code" title="인라인 코드">`코드`</button>
+        <button class="tb" data-action="codeblock" title="코드 블록">```블록```</button>
+        <button class="tb" data-action="hr" title="구분선">── 구분선</button>
+      </div>
+
+      <!-- Editor + Preview -->
+      <div style="display:flex;gap:0;border:1px solid var(--color-border);border-radius:0 0 10px 10px;min-height:500px;overflow:hidden;" id="editor-container">
+        <!-- Editor -->
+        <div style="flex:1;display:flex;flex-direction:column;border-right:1px solid var(--color-border);">
+          <div style="padding:0.4rem 0.75rem;background:#f8fafc;font-size:0.72rem;font-weight:600;color:var(--color-neutral-400);border-bottom:1px solid var(--color-border);">마크다운</div>
+          <textarea id="post-body" placeholder="마크다운으로 글을 작성하세요...
+
+## 소제목을 입력하세요
+
+본문 내용을 작성합니다. **굵게** 또는 *기울임*으로 강조할 수 있습니다.
+
+- 목록 항목 1
+- 목록 항목 2
+
+> 인용구를 넣을 수 있습니다.
+
+| 항목 | 내용 |
+|------|------|
+| A | 설명 |
+| B | 설명 |" style="flex:1;padding:1rem;border:none;font-size:0.92rem;resize:none;outline:none;font-family:'Pretendard Variable',sans-serif;line-height:1.8;box-sizing:border-box;width:100%;"></textarea>
+        </div>
+        <!-- Preview -->
+        <div style="flex:1;display:flex;flex-direction:column;">
+          <div style="padding:0.4rem 0.75rem;background:#f8fafc;font-size:0.72rem;font-weight:600;color:var(--color-neutral-400);border-bottom:1px solid var(--color-border);">미리보기</div>
+          <div id="preview" class="prose max-w-none" style="flex:1;padding:1rem;overflow-y:auto;">
+            <p style="color:var(--color-neutral-400);">미리보기가 여기에 표시됩니다...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status message -->
+      <div id="status-msg" style="display:none;margin-top:1rem;padding:0.6rem 1rem;border-radius:8px;font-size:0.85rem;"></div>
+
+      <!-- Tips -->
+      <div style="margin-top:1.5rem;padding:1.25rem;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;">
+        <h3 style="font-size:0.88rem;font-weight:700;color:#16a34a;margin-bottom:0.5rem;">마크다운 작성 팁</h3>
+        <div style="font-size:0.82rem;color:var(--color-neutral-600);line-height:1.7;">
+          <code style="background:#e2e8f0;padding:0.1rem 0.3rem;border-radius:4px;">## 제목</code> 소제목 &nbsp;|&nbsp;
+          <code style="background:#e2e8f0;padding:0.1rem 0.3rem;border-radius:4px;">**굵게**</code> 강조 &nbsp;|&nbsp;
+          <code style="background:#e2e8f0;padding:0.1rem 0.3rem;border-radius:4px;">- 항목</code> 목록 &nbsp;|&nbsp;
+          <code style="background:#e2e8f0;padding:0.1rem 0.3rem;border-radius:4px;">[텍스트](URL)</code> 링크 &nbsp;|&nbsp;
+          <code style="background:#e2e8f0;padding:0.1rem 0.3rem;border-radius:4px;">![설명](URL)</code> 이미지 &nbsp;|&nbsp;
+          <code style="background:#e2e8f0;padding:0.1rem 0.3rem;border-radius:4px;">> 인용</code> 인용구
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- marked.js + DOMPurify from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" is:inline></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js" is:inline></script>
+
+  <script is:inline>
+    // Auth check
+    fetch('/api/auth/me', { credentials: 'include' })
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .then(function(data) {
+        if (data && data.user) {
+          document.getElementById('editor-section').style.display = 'block';
+        } else {
+          document.getElementById('not-logged-in').style.display = 'block';
+        }
+      })
+      .catch(function() {
+        document.getElementById('not-logged-in').style.display = 'block';
+      });
+
+    // Pre-select category from URL param
+    var params = new URLSearchParams(window.location.search);
+    var preCategory = params.get('category');
+    if (preCategory) {
+      var sel = document.getElementById('post-category');
+      if (sel) sel.value = preCategory;
+    }
+
+    // Login button
+    document.getElementById('login-btn').addEventListener('click', function() {
+      if (typeof openAuthModal === 'function') openAuthModal('login');
+    });
+
+    // Toolbar actions
+    var textarea = document.getElementById('post-body');
+
+    function insertText(before, after, placeholder) {
+      var start = textarea.selectionStart;
+      var end = textarea.selectionEnd;
+      var selected = textarea.value.substring(start, end);
+      var text = selected || placeholder || '';
+      var newText = before + text + (after || '');
+      textarea.setRangeText(newText, start, end, 'end');
+      textarea.focus();
+      if (!selected && placeholder) {
+        textarea.selectionStart = start + before.length;
+        textarea.selectionEnd = start + before.length + text.length;
+      }
+      updatePreview();
+    }
+
+    function insertLine(prefix) {
+      var start = textarea.selectionStart;
+      var val = textarea.value;
+      var lineStart = val.lastIndexOf('\n', start - 1) + 1;
+      var beforeLine = val.substring(0, lineStart);
+      var afterCursor = val.substring(start);
+      var currentLine = val.substring(lineStart, start);
+      textarea.value = beforeLine + prefix + currentLine + afterCursor;
+      textarea.selectionStart = textarea.selectionEnd = lineStart + prefix.length + currentLine.length;
+      textarea.focus();
+      updatePreview();
+    }
+
+    var ACTIONS = {
+      h2: function() { insertLine('## '); },
+      h3: function() { insertLine('### '); },
+      bold: function() { insertText('**', '**', '굵은 텍스트'); },
+      italic: function() { insertText('*', '*', '기울임 텍스트'); },
+      strikethrough: function() { insertText('~~', '~~', '취소선 텍스트'); },
+      ul: function() { insertLine('- '); },
+      ol: function() { insertLine('1. '); },
+      blockquote: function() { insertLine('> '); },
+      link: function() {
+        var url = prompt('링크 URL을 입력하세요:', 'https://');
+        if (url) insertText('[', '](' + url + ')', '링크 텍스트');
+      },
+      image: function() {
+        var url = prompt('이미지 URL을 입력하세요:', 'https://');
+        if (url) insertText('![', '](' + url + ')', '이미지 설명');
+      },
+      table: function() {
+        var tpl = '\n| 항목 | 내용 | 비고 |\n|------|------|------|\n| A | 설명 | - |\n| B | 설명 | - |\n';
+        insertText(tpl, '', '');
+      },
+      code: function() { insertText('`', '`', '코드'); },
+      codeblock: function() { insertText('\n```\n', '\n```\n', '코드 블록'); },
+      hr: function() { insertText('\n---\n', '', ''); }
+    };
+
+    document.getElementById('toolbar').addEventListener('click', function(e) {
+      var btn = e.target.closest('.tb');
+      if (!btn) return;
+      var action = btn.getAttribute('data-action');
+      if (ACTIONS[action]) ACTIONS[action]();
+    });
+
+    // Live preview
+    function updatePreview() {
+      var md = textarea.value;
+      var preview = document.getElementById('preview');
+      if (!md.trim()) {
+        preview.innerHTML = '<p style="color:var(--color-neutral-400);">미리보기가 여기에 표시됩니다...</p>';
+        return;
+      }
+      if (typeof marked !== 'undefined' && typeof DOMPurify !== 'undefined') {
+        var html = marked.parse(md);
+        preview.innerHTML = DOMPurify.sanitize(html);
+      } else {
+        preview.textContent = md;
+      }
+    }
+
+    textarea.addEventListener('input', updatePreview);
+
+    // Configure marked
+    if (typeof marked !== 'undefined') {
+      marked.setOptions({ breaks: true, gfm: true });
+    }
+
+    // Publish
+    document.getElementById('publish-btn').addEventListener('click', function() {
+      var title = document.getElementById('post-title').value.trim();
+      var body = textarea.value.trim();
+      var category = document.getElementById('post-category').value;
+      var msgEl = document.getElementById('status-msg');
+
+      if (!title) { showMsg('제목을 입력해주세요.', true); return; }
+      if (!body) { showMsg('내용을 입력해주세요.', true); return; }
+      if (body.length < 50) { showMsg('내용을 50자 이상 작성해주세요.', true); return; }
+
+      var btn = document.getElementById('publish-btn');
+      btn.disabled = true; btn.textContent = '발행 중...';
+
+      fetch('/api/posts', {
+        method: 'POST', credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ category: category, title: title, body: body })
+      })
+      .then(function(r) {
+        if (!r.ok) throw new Error('Failed');
+        return r.json();
+      })
+      .then(function() {
+        showMsg('글이 발행되었습니다! 잠시 후 이동합니다.', false);
+        setTimeout(function() {
+          location.href = '/category/' + category + '/';
+        }, 1500);
+      })
+      .catch(function() {
+        btn.disabled = false; btn.textContent = '발행하기';
+        showMsg('발행에 실패했습니다. 로그인 상태를 확인해주세요.', true);
+      });
+    });
+
+    function showMsg(msg, isError) {
+      var el = document.getElementById('status-msg');
+      el.textContent = msg;
+      el.style.display = 'block';
+      el.style.background = isError ? '#fef2f2' : '#f0fdf4';
+      el.style.color = isError ? '#dc2626' : '#16a34a';
+      if (isError) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // Tab key inserts spaces in textarea
+    textarea.addEventListener('keydown', function(e) {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        var start = this.selectionStart;
+        this.setRangeText('  ', start, this.selectionEnd, 'end');
+        updatePreview();
+      }
+    });
+  </script>
+
+  <style is:inline>
+    .tb {
+      padding: 0.3rem 0.6rem;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      background: white;
+      font-size: 0.75rem;
+      cursor: pointer;
+      color: var(--color-neutral-600);
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .tb:hover {
+      background: var(--color-primary-50);
+      border-color: var(--color-primary-300);
+      color: var(--color-primary-600);
+    }
+    @media (max-width: 768px) {
+      #editor-container {
+        flex-direction: column !important;
+      }
+      #editor-container > div:first-child {
+        border-right: none !important;
+        border-bottom: 1px solid var(--color-border);
+      }
+      #editor-container textarea {
+        min-height: 300px;
+      }
+      #preview {
+        min-height: 300px;
+      }
+    }
+  </style>
+</BaseLayout>

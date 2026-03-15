@@ -117,6 +117,8 @@ const breadcrumbItems = [
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" is:inline></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js" is:inline></script>
   <script is:inline define:vars={{ category }}>
     var _category = category;
     var _currentUser = null;
@@ -129,6 +131,13 @@ const breadcrumbItems = [
     function formatDate(d) {
       var dt = new Date(d);
       return dt.getFullYear() + '.' + String(dt.getMonth()+1).padStart(2,'0') + '.' + String(dt.getDate()).padStart(2,'0');
+    }
+
+    function renderMd(text) {
+      if (typeof marked !== 'undefined' && typeof DOMPurify !== 'undefined') {
+        return DOMPurify.sanitize(marked.parse(text || ''));
+      }
+      return escapeHtml(text || '');
     }
 
     function toggleWriteForm() {
@@ -243,7 +252,7 @@ const breadcrumbItems = [
                 '</div>' : '') +
               '</div>' +
               '<h3 style="font-size:1.05rem;font-weight:700;color:var(--color-neutral-800);margin-bottom:0.5rem;line-height:1.4;">' + escapeHtml(p.title) + '</h3>' +
-              '<div style="font-size:0.9rem;color:var(--color-neutral-600);line-height:1.7;white-space:pre-wrap;">' + escapeHtml(p.body) + '</div>' +
+              '<div class="prose max-w-none" style="font-size:0.9rem;">' + renderMd(p.body) + '</div>' +
             '</article>';
           });
           el.innerHTML = html;
@@ -299,11 +308,11 @@ const breadcrumbItems = [
         if (data && data.user) {
           _currentUser = data.user;
           var area = document.getElementById('write-btn-area');
-          var btn = document.createElement('button');
-          btn.style.cssText = 'display:inline-flex;align-items:center;gap:0.5rem;padding:0.6rem 1.25rem;background:var(--color-primary-500);color:white;border:none;border-radius:10px;font-size:0.88rem;font-weight:600;cursor:pointer;white-space:nowrap;';
-          btn.innerHTML = '<svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg> 글쓰기';
-          btn.addEventListener('click', toggleWriteForm);
-          area.appendChild(btn);
+          var link = document.createElement('a');
+          link.href = '/write/?category=' + _category;
+          link.style.cssText = 'display:inline-flex;align-items:center;gap:0.5rem;padding:0.6rem 1.25rem;background:var(--color-primary-500);color:white;border:none;border-radius:10px;font-size:0.88rem;font-weight:600;cursor:pointer;white-space:nowrap;text-decoration:none;';
+          link.innerHTML = '<svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg> 글쓰기';
+          area.appendChild(link);
         }
       });
 

@@ -17,6 +17,7 @@ export default defineConfig({
         !page.includes('/mypage') &&
         !page.includes('/reset-password') &&
         !page.includes('/community') &&
+        !page.includes('/write') &&
         !page.includes('/404'),
     }),
     mdx(),
