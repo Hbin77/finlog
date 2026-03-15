@@ -95,15 +95,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div id="status-msg" style="display:none;margin-top:1rem;padding:0.6rem 1rem;border-radius:8px;font-size:0.85rem;"></div>
 
       <!-- Tips -->
-      <div style="margin-top:1.5rem;padding:1.25rem;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;">
-        <h3 style="font-size:0.88rem;font-weight:700;color:#16a34a;margin-bottom:0.5rem;">마크다운 작성 팁</h3>
-        <div style="font-size:0.82rem;color:var(--color-neutral-600);line-height:1.7;">
-          <code style="background:#e2e8f0;padding:0.1rem 0.3rem;border-radius:4px;">## 제목</code> 소제목 &nbsp;|&nbsp;
-          <code style="background:#e2e8f0;padding:0.1rem 0.3rem;border-radius:4px;">**굵게**</code> 강조 &nbsp;|&nbsp;
-          <code style="background:#e2e8f0;padding:0.1rem 0.3rem;border-radius:4px;">- 항목</code> 목록 &nbsp;|&nbsp;
-          <code style="background:#e2e8f0;padding:0.1rem 0.3rem;border-radius:4px;">[텍스트](URL)</code> 링크 &nbsp;|&nbsp;
-          <code style="background:#e2e8f0;padding:0.1rem 0.3rem;border-radius:4px;">![설명](URL)</code> 이미지 &nbsp;|&nbsp;
-          <code style="background:#e2e8f0;padding:0.1rem 0.3rem;border-radius:4px;">> 인용</code> 인용구
+      <div style="margin-top:1.5rem;background:white;border:1px solid var(--color-border);border-radius:12px;overflow:hidden;">
+        <div style="padding:0.6rem 1rem;background:var(--color-primary-50);border-bottom:1px solid var(--color-border);display:flex;align-items:center;gap:0.4rem;">
+          <svg width="14" height="14" fill="none" stroke="var(--color-primary-500)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span style="font-size:0.8rem;font-weight:600;color:var(--color-primary-600);">마크다운 문법 가이드</span>
+        </div>
+        <div style="padding:0.75rem 1rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:0.4rem 1.5rem;font-size:0.78rem;color:var(--color-neutral-500);">
+          <div><code style="background:var(--color-primary-50);color:var(--color-primary-600);padding:0.1rem 0.35rem;border-radius:4px;font-size:0.72rem;">## 텍스트</code> 제목</div>
+          <div><code style="background:var(--color-primary-50);color:var(--color-primary-600);padding:0.1rem 0.35rem;border-radius:4px;font-size:0.72rem;">**텍스트**</code> 굵게</div>
+          <div><code style="background:var(--color-primary-50);color:var(--color-primary-600);padding:0.1rem 0.35rem;border-radius:4px;font-size:0.72rem;">*텍스트*</code> 기울임</div>
+          <div><code style="background:var(--color-primary-50);color:var(--color-primary-600);padding:0.1rem 0.35rem;border-radius:4px;font-size:0.72rem;">- 항목</code> 목록</div>
+          <div><code style="background:var(--color-primary-50);color:var(--color-primary-600);padding:0.1rem 0.35rem;border-radius:4px;font-size:0.72rem;">[텍스트](URL)</code> 링크</div>
+          <div><code style="background:var(--color-primary-50);color:var(--color-primary-600);padding:0.1rem 0.35rem;border-radius:4px;font-size:0.72rem;">![설명](URL)</code> 이미지</div>
+          <div><code style="background:var(--color-primary-50);color:var(--color-primary-600);padding:0.1rem 0.35rem;border-radius:4px;font-size:0.72rem;">> 텍스트</code> 인용구</div>
+          <div><code style="background:var(--color-primary-50);color:var(--color-primary-600);padding:0.1rem 0.35rem;border-radius:4px;font-size:0.72rem;">| A | B |</code> 표</div>
         </div>
       </div>
     </div>
