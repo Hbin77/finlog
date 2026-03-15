@@ -61,6 +61,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <button class="tb" data-action="hr" title="구분선">── 구분선</button>
       </div>
 
+      <!-- Hidden file input for image upload -->
+      <input type="file" id="image-upload" accept="image/*" style="display:none;" />
+      <div id="upload-progress" style="display:none;margin-bottom:0.5rem;padding:0.5rem 0.75rem;background:var(--color-primary-50);border-radius:8px;font-size:0.82rem;color:var(--color-primary-600);display:none;">업로드 중...</div>
+
       <!-- Editor + Preview -->
       <div style="display:flex;gap:0;border:1px solid var(--color-border);border-radius:0 0 10px 10px;min-height:500px;overflow:hidden;" id="editor-container">
         <!-- Editor -->
@@ -149,58 +153,84 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     // Toolbar actions
     var textarea = document.getElementById('post-body');
 
-    function insertText(before, after, placeholder) {
+    // Toggle wrap: if selection already has before/after, remove them; otherwise add them
+    function toggleWrap(before, after, placeholder) {
       var start = textarea.selectionStart;
       var end = textarea.selectionEnd;
-      var selected = textarea.value.substring(start, end);
-      var text = selected || placeholder || '';
-      var newText = before + text + (after || '');
-      textarea.setRangeText(newText, start, end, 'end');
-      textarea.focus();
-      if (!selected && placeholder) {
-        textarea.selectionStart = start + before.length;
-        textarea.selectionEnd = start + before.length + text.length;
+      var val = textarea.value;
+      var selected = val.substring(start, end);
+
+      // Check if already wrapped
+      var bLen = before.length;
+      var aLen = (after || '').length;
+      if (start >= bLen && val.substring(start - bLen, start) === before &&
+          val.substring(end, end + aLen) === (after || '')) {
+        // Remove wrapping
+        textarea.value = val.substring(0, start - bLen) + selected + val.substring(end + aLen);
+        textarea.selectionStart = start - bLen;
+        textarea.selectionEnd = end - bLen;
+      } else {
+        // Add wrapping
+        var text = selected || placeholder || '';
+        textarea.setRangeText(before + text + (after || ''), start, end, 'end');
+        if (!selected && placeholder) {
+          textarea.selectionStart = start + bLen;
+          textarea.selectionEnd = start + bLen + text.length;
+        }
       }
+      textarea.focus();
       updatePreview();
     }
 
-    function insertLine(prefix) {
+    // Toggle line prefix: if line starts with prefix, remove it; otherwise add it
+    function toggleLine(prefix) {
       var start = textarea.selectionStart;
       var val = textarea.value;
       var lineStart = val.lastIndexOf('\n', start - 1) + 1;
-      var beforeLine = val.substring(0, lineStart);
-      var afterCursor = val.substring(start);
-      var currentLine = val.substring(lineStart, start);
-      textarea.value = beforeLine + prefix + currentLine + afterCursor;
-      textarea.selectionStart = textarea.selectionEnd = lineStart + prefix.length + currentLine.length;
+      var lineEnd = val.indexOf('\n', start);
+      if (lineEnd === -1) lineEnd = val.length;
+      var line = val.substring(lineStart, lineEnd);
+
+      if (line.startsWith(prefix)) {
+        // Remove prefix
+        textarea.value = val.substring(0, lineStart) + line.substring(prefix.length) + val.substring(lineEnd);
+        textarea.selectionStart = textarea.selectionEnd = Math.max(lineStart, start - prefix.length);
+      } else {
+        // Add prefix
+        textarea.value = val.substring(0, lineStart) + prefix + line + val.substring(lineEnd);
+        textarea.selectionStart = textarea.selectionEnd = start + prefix.length;
+      }
+      textarea.focus();
+      updatePreview();
+    }
+
+    function insertText(text) {
+      var start = textarea.selectionStart;
+      textarea.setRangeText(text, start, textarea.selectionEnd, 'end');
       textarea.focus();
       updatePreview();
     }
 
     var ACTIONS = {
-      h2: function() { insertLine('## '); },
-      h3: function() { insertLine('### '); },
-      bold: function() { insertText('**', '**', '굵은 텍스트'); },
-      italic: function() { insertText('*', '*', '기울임 텍스트'); },
-      strikethrough: function() { insertText('~~', '~~', '취소선 텍스트'); },
-      ul: function() { insertLine('- '); },
-      ol: function() { insertLine('1. '); },
-      blockquote: function() { insertLine('> '); },
+      h2: function() { toggleLine('## '); },
+      h3: function() { toggleLine('### '); },
+      bold: function() { toggleWrap('**', '**', '굵은 텍스트'); },
+      italic: function() { toggleWrap('*', '*', '기울임 텍스트'); },
+      strikethrough: function() { toggleWrap('~~', '~~', '취소선 텍스트'); },
+      ul: function() { toggleLine('- '); },
+      ol: function() { toggleLine('1. '); },
+      blockquote: function() { toggleLine('> '); },
       link: function() {
         var url = prompt('링크 URL을 입력하세요:', 'https://');
-        if (url) insertText('[', '](' + url + ')', '링크 텍스트');
+        if (url) toggleWrap('[', '](' + url + ')', '링크 텍스트');
       },
-      image: function() {
-        var url = prompt('이미지 URL을 입력하세요:', 'https://');
-        if (url) insertText('![', '](' + url + ')', '이미지 설명');
-      },
+      image: function() { document.getElementById('image-upload').click(); },
       table: function() {
-        var tpl = '\n| 항목 | 내용 | 비고 |\n|------|------|------|\n| A | 설명 | - |\n| B | 설명 | - |\n';
-        insertText(tpl, '', '');
+        insertText('\n| 항목 | 내용 | 비고 |\n|------|------|------|\n| A | 설명 | - |\n| B | 설명 | - |\n');
       },
-      code: function() { insertText('`', '`', '코드'); },
-      codeblock: function() { insertText('\n```\n', '\n```\n', '코드 블록'); },
-      hr: function() { insertText('\n---\n', '', ''); }
+      code: function() { toggleWrap('`', '`', '코드'); },
+      codeblock: function() { toggleWrap('\n```\n', '\n```\n', '코드 블록'); },
+      hr: function() { insertText('\n---\n'); }
     };
 
     document.getElementById('toolbar').addEventListener('click', function(e) {
@@ -208,6 +238,69 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       if (!btn) return;
       var action = btn.getAttribute('data-action');
       if (ACTIONS[action]) ACTIONS[action]();
+    });
+
+    // Image file upload
+    document.getElementById('image-upload').addEventListener('change', function(e) {
+      var file = e.target.files[0];
+      if (!file) return;
+      if (file.size > 5 * 1024 * 1024) { alert('이미지 크기는 5MB 이하만 가능합니다.'); return; }
+
+      var progress = document.getElementById('upload-progress');
+      progress.style.display = 'block';
+      progress.textContent = '이미지 업로드 중...';
+
+      var formData = new FormData();
+      formData.append('image', file);
+
+      fetch('/api/upload', { method: 'POST', credentials: 'include', body: formData })
+        .then(function(r) {
+          if (!r.ok) throw new Error('Upload failed');
+          return r.json();
+        })
+        .then(function(data) {
+          progress.style.display = 'none';
+          insertText('\n![' + (file.name || '이미지') + '](' + data.url + ')\n');
+        })
+        .catch(function() {
+          progress.style.display = 'none';
+          alert('이미지 업로드에 실패했습니다.');
+        });
+      e.target.value = '';
+    });
+
+    // Drag & drop image upload
+    textarea.addEventListener('dragover', function(e) { e.preventDefault(); textarea.style.background = '#f0fdf4'; });
+    textarea.addEventListener('dragleave', function() { textarea.style.background = ''; });
+    textarea.addEventListener('drop', function(e) {
+      e.preventDefault();
+      textarea.style.background = '';
+      var file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith('image/')) {
+        var input = document.getElementById('image-upload');
+        var dt = new DataTransfer();
+        dt.items.add(file);
+        input.files = dt.files;
+        input.dispatchEvent(new Event('change'));
+      }
+    });
+
+    // Paste image upload
+    textarea.addEventListener('paste', function(e) {
+      var items = e.clipboardData && e.clipboardData.items;
+      if (!items) return;
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].type.startsWith('image/')) {
+          e.preventDefault();
+          var file = items[i].getAsFile();
+          var input = document.getElementById('image-upload');
+          var dt = new DataTransfer();
+          dt.items.add(file);
+          input.files = dt.files;
+          input.dispatchEvent(new Event('change'));
+          break;
+        }
+      }
     });
 
     // Live preview
