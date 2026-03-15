@@ -30,7 +30,7 @@ const upload = multer({
   storage: storage,
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
   fileFilter: function (req, file, cb) {
-    const allowed = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.avif', '.svg'];
+    const allowed = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.avif'];
     const ext = path.extname(file.originalname).toLowerCase();
     if (allowed.includes(ext)) {
       cb(null, true);
