@@ -60,6 +60,7 @@ const breadcrumbItems = [
 ];
 
 const postSlug = post.slug;
+const postBody = post.body || '';
 ---
 
 <BaseLayout
@@ -119,38 +120,37 @@ const postSlug = post.slug;
           <slot />
         </div>
 
-        <!-- Suggestion modal -->
-        <div id="suggestion-modal" style="display:none;margin:2rem 0;background:#f0fdf4;border:1px solid #86efac;border-radius:14px;padding:1.5rem;">
-          <h3 style="font-size:1rem;font-weight:700;color:#16a34a;margin-bottom:0.5rem;display:flex;align-items:center;gap:0.4rem;">
-            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-            수정 제안하기
-          </h3>
-          <p style="font-size:0.82rem;color:var(--color-neutral-500);margin-bottom:1rem;">틀린 부분이나 개선할 내용을 알려주세요. 작성자가 검토 후 반영합니다.</p>
-          <div id="suggestion-msg" style="display:none;margin-bottom:0.75rem;padding:0.5rem 0.75rem;border-radius:8px;font-size:0.82rem;"></div>
-          <div style="margin-bottom:0.75rem;">
-            <label style="display:block;font-size:0.78rem;font-weight:600;color:#555;margin-bottom:0.25rem;">기존 내용 (수정할 부분)</label>
-            <textarea id="sug-original" rows="3" placeholder="수정이 필요한 원문을 붙여넣어주세요" style="width:100%;padding:0.6rem;border:1px solid #86efac;border-radius:8px;font-size:0.88rem;box-sizing:border-box;resize:vertical;"></textarea>
+        <!-- Suggestion editor (wiki-style) -->
+        <div id="suggestion-editor" style="display:none;margin:2rem 0;background:white;border:1px solid var(--color-border);border-radius:14px;overflow:hidden;">
+          <div style="padding:0.75rem 1.25rem;background:var(--color-primary-50);border-bottom:1px solid var(--color-border);display:flex;justify-content:space-between;align-items:center;">
+            <h3 style="font-size:0.95rem;font-weight:700;color:var(--color-primary-600);display:flex;align-items:center;gap:0.4rem;">
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+              글 수정 제안
+            </h3>
+            <button id="sug-cancel-btn" style="padding:0.3rem 0.75rem;border:1px solid var(--color-border);border-radius:6px;background:white;font-size:0.78rem;cursor:pointer;color:var(--color-neutral-500);">닫기</button>
           </div>
-          <div style="margin-bottom:0.75rem;">
-            <label style="display:block;font-size:0.78rem;font-weight:600;color:#555;margin-bottom:0.25rem;">제안 내용 (이렇게 수정)</label>
-            <textarea id="sug-suggested" rows="3" placeholder="수정된 내용을 작성해주세요" style="width:100%;padding:0.6rem;border:1px solid #86efac;border-radius:8px;font-size:0.88rem;box-sizing:border-box;resize:vertical;"></textarea>
-          </div>
-          <div style="margin-bottom:1rem;">
-            <label style="display:block;font-size:0.78rem;font-weight:600;color:#555;margin-bottom:0.25rem;">사유 (선택)</label>
-            <input id="sug-reason" type="text" placeholder="예: 최신 금리 정보가 변경되었습니다" style="width:100%;padding:0.5rem 0.6rem;border:1px solid #86efac;border-radius:8px;font-size:0.88rem;box-sizing:border-box;" />
-          </div>
-          <div style="display:flex;justify-content:flex-end;gap:0.5rem;">
-            <button id="sug-cancel-btn" style="padding:0.45rem 1rem;border:1px solid var(--color-border);border-radius:8px;background:white;font-size:0.82rem;cursor:pointer;">취소</button>
-            <button id="sug-submit-btn" style="padding:0.45rem 1rem;background:#16a34a;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:600;cursor:pointer;">제안 보내기</button>
+          <div style="padding:1rem 1.25rem;">
+            <p style="font-size:0.82rem;color:var(--color-neutral-500);margin-bottom:1rem;">아래 내용을 직접 수정한 후 "수정 제안하기"를 눌러주세요. 작성자가 검토 후 반영합니다.</p>
+            <div id="suggestion-msg" style="display:none;margin-bottom:0.75rem;padding:0.5rem 0.75rem;border-radius:8px;font-size:0.82rem;"></div>
+            <textarea id="sug-editor" rows="20" style="width:100%;padding:0.75rem;border:1px solid var(--color-border);border-radius:8px;font-size:0.88rem;font-family:'Pretendard Variable',monospace;line-height:1.8;box-sizing:border-box;resize:vertical;"></textarea>
+            <div style="margin-top:0.75rem;">
+              <input id="sug-reason" type="text" placeholder="수정 사유 (선택): 예) 최신 금리 정보 반영" style="width:100%;padding:0.5rem 0.75rem;border:1px solid var(--color-border);border-radius:8px;font-size:0.85rem;box-sizing:border-box;" />
+            </div>
+            <div style="display:flex;justify-content:flex-end;gap:0.5rem;margin-top:1rem;">
+              <button id="sug-cancel-btn2" style="padding:0.5rem 1rem;border:1px solid var(--color-border);border-radius:8px;background:white;font-size:0.85rem;cursor:pointer;">취소</button>
+              <button id="sug-submit-btn" style="padding:0.5rem 1.25rem;background:var(--color-primary-500);color:white;border:none;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer;">수정 제안하기</button>
+            </div>
           </div>
         </div>
 
-        <script is:inline define:vars={{ postSlug }}>
+        <script is:inline define:vars={{ postSlug, postBody }}>
           var _postSlug = postSlug;
+          var _postBody = postBody;
 
           // Bind buttons
-          document.getElementById('suggest-edit-btn').addEventListener('click', openSuggestionModal);
-          document.getElementById('sug-cancel-btn').addEventListener('click', closeSuggestionModal);
+          document.getElementById('suggest-edit-btn').addEventListener('click', openSuggestionEditor);
+          document.getElementById('sug-cancel-btn').addEventListener('click', closeSuggestionEditor);
+          document.getElementById('sug-cancel-btn2').addEventListener('click', closeSuggestionEditor);
           document.getElementById('sug-submit-btn').addEventListener('click', submitSuggestion);
 
           // Show suggest button only for logged in users
@@ -163,21 +163,29 @@ const postSlug = post.slug;
               }
             });
 
-          function openSuggestionModal() {
-            document.getElementById('suggestion-modal').style.display = 'block';
-            document.getElementById('suggestion-modal').scrollIntoView({ behavior: 'smooth', block: 'center' });
+          function openSuggestionEditor() {
+            var editor = document.getElementById('suggestion-editor');
+            var textarea = document.getElementById('sug-editor');
+            textarea.value = _postBody;
+            editor.style.display = 'block';
+            editor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            textarea.focus();
           }
-          function closeSuggestionModal() {
-            document.getElementById('suggestion-modal').style.display = 'none';
+          function closeSuggestionEditor() {
+            document.getElementById('suggestion-editor').style.display = 'none';
           }
           function submitSuggestion() {
-            var original = document.getElementById('sug-original').value.trim();
-            var suggested = document.getElementById('sug-suggested').value.trim();
+            var suggested = document.getElementById('sug-editor').value.trim();
             var reason = document.getElementById('sug-reason').value.trim();
             var msgEl = document.getElementById('suggestion-msg');
 
-            if (!original || !suggested) {
-              msgEl.textContent = '기존 내용과 제안 내용을 모두 입력해주세요.';
+            if (!suggested) {
+              msgEl.textContent = '수정 내용을 입력해주세요.';
+              msgEl.style.display = 'block'; msgEl.style.background = '#fef2f2'; msgEl.style.color = '#dc2626';
+              return;
+            }
+            if (suggested === _postBody.trim()) {
+              msgEl.textContent = '변경된 내용이 없습니다.';
               msgEl.style.display = 'block'; msgEl.style.background = '#fef2f2'; msgEl.style.color = '#dc2626';
               return;
             }
@@ -188,24 +196,21 @@ const postSlug = post.slug;
             fetch('/api/suggestions', {
               method: 'POST', credentials: 'include',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ post_slug: _postSlug, original_text: original, suggested_text: suggested, reason: reason })
+              body: JSON.stringify({ post_slug: _postSlug, original_text: _postBody, suggested_text: suggested, reason: reason })
             })
             .then(function(r) { return r.json().then(function(d) { return { ok: r.ok, data: d }; }); })
             .then(function(res) {
-              btn.disabled = false; btn.textContent = '제안 보내기';
+              btn.disabled = false; btn.textContent = '수정 제안하기';
               if (res.ok) {
-                msgEl.textContent = '수정 제안이 전송되었습니다. 작성자가 검토 후 반영합니다.';
+                msgEl.textContent = '수정 제안이 전송되었습니다! 작성자가 검토 후 반영합니다.';
                 msgEl.style.display = 'block'; msgEl.style.background = '#f0fdf4'; msgEl.style.color = '#16a34a';
-                document.getElementById('sug-original').value = '';
-                document.getElementById('sug-suggested').value = '';
-                document.getElementById('sug-reason').value = '';
               } else {
                 msgEl.textContent = res.data.error || '제안 전송에 실패했습니다.';
                 msgEl.style.display = 'block'; msgEl.style.background = '#fef2f2'; msgEl.style.color = '#dc2626';
               }
             })
             .catch(function() {
-              btn.disabled = false; btn.textContent = '제안 보내기';
+              btn.disabled = false; btn.textContent = '수정 제안하기';
               msgEl.textContent = '네트워크 오류가 발생했습니다.'; msgEl.style.display = 'block'; msgEl.style.background = '#fef2f2'; msgEl.style.color = '#dc2626';
             });
           }
