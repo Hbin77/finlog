@@ -119,8 +119,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   </div>
 
   <!-- marked.js + DOMPurify from CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" is:inline></script>
-  <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js" is:inline></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked@15.0.7/marked.min.js" is:inline></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.4/dist/purify.min.js" is:inline></script>
 
   <script is:inline>
     // Auth check
@@ -335,7 +335,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       if (!title) { showMsg('제목을 입력해주세요.', true); return; }
       if (!body) { showMsg('내용을 입력해주세요.', true); return; }
-      if (body.length < 50) { showMsg('내용을 50자 이상 작성해주세요.', true); return; }
+      if (body.length < 200) { showMsg('내용을 200자 이상 작성해주세요.', true); return; }
 
       var btn = document.getElementById('publish-btn');
       btn.disabled = true; btn.textContent = '발행 중...';
